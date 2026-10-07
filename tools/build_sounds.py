@@ -1,4 +1,4 @@
-"""Layered gunshots for the small-calibre pack, built from the pack's own recordings plus synthesised body, crack, action and reverb layers.
+"""Layered gunshots for the small-calibre pack, built from the pack's own recordings: body and snap from the blast itself, action clicks cut from the unjam recordings, echoes of the shot for the tails.
 
 Per weapon:  close (npc, mono, 3 takes) + mech (semi-autos, 2 takes) + tail (3 takes) + far (2 takes)   -> [smallcal_<w>_snd_shoot]
              1p (actor, stereo, 3 takes) + mech + 1p tail (stereo, 2 takes)                             -> [smallcal_<w>_snd_shoot_actor]
@@ -27,24 +27,24 @@ CM = {
 
 # weapon key -> folder, source shot file, calibre profile, semi-auto (has a cycling action), full auto
 WEAPONS = {
-    'pt22': dict(folder='taurus_pts', src='22lr_pistol_shoot.ogg', cal='22lr', mech=True),
-    'pt25': dict(folder='taurus_pts', src='25acp_shoot.ogg', cal='25acp', mech=True),
-    'cvp1908': dict(folder='cvp1908', src='25acp_shoot_striker.ogg', cal='25acp', mech=True, seed=7),
-    'sav1907': dict(folder='sav1907', src='32acp_shoot.ogg', cal='32acp', mech=True),
-    'rem51': dict(folder='rem51', src='380acp_shoot_striker.ogg', cal='380acp', mech=True),
-    'trejo22': dict(folder='trejo22', src='22lr_pistol_shoot.ogg', cal='22lr', mech=True, auto=True, seed=3),
+    'pt22': dict(unjam='pt25_unjam.ogg', folder='taurus_pts', src='22lr_pistol_shoot.ogg', cal='22lr', mech=True),
+    'pt25': dict(unjam='pt25_unjam.ogg', folder='taurus_pts', src='25acp_shoot.ogg', cal='25acp', mech=True),
+    'cvp1908': dict(unjam='cvp1908_unjam.ogg', folder='cvp1908', src='25acp_shoot_striker.ogg', cal='25acp', mech=True, seed=7),
+    'sav1907': dict(unjam='sav1907_unjam.ogg', folder='sav1907', src='32acp_shoot.ogg', cal='32acp', mech=True),
+    'rem51': dict(unjam='rem51_unjam.ogg', folder='rem51', src='380acp_shoot_striker.ogg', cal='380acp', mech=True),
+    'trejo22': dict(unjam='trejo22_unjam.ogg', folder='trejo22', src='22lr_pistol_shoot.ogg', cal='22lr', mech=True, auto=True, seed=3),
     '9galo22': dict(folder='9galo22', src='rev22lr_shoot.ogg', cal='22lr_rev', mech=False),
     'cpp38': dict(folder='cpp38', src='38spl_shoot.ogg', cal='38spl', mech=False),
 }
 
-# calibre profile: body thump (f start, f end, seconds) scaled so that 60-200 Hz sits `low` dB against 500-3000 Hz in the first 120 ms, crack (level, decay ms), reverb T60 s, mid dip dB, far low-pass Hz
+# calibre profile: `low` = 60-200 Hz against 500-3000 Hz (dB, first 120 ms), `high` = 3-10 kHz against 500-3000 Hz (dB, first 30 ms), echo T60 s, mid dip dB, far low-pass Hz, action level
 CAL = {
-    '22lr': dict(high=3.0, thump=(230, 120, 0.045), low=-13.0, crack=(0.55, 10), t60=0.9, dip=-5.0, far_lp=1800, mech_level=0.34),
-    '22lr_rev': dict(high=2.5, thump=(210, 110, 0.05), low=-12.0, crack=(0.6, 11), t60=1.0, dip=-5.0, far_lp=1800, mech_level=0.0),
-    '25acp': dict(high=2.5, thump=(210, 110, 0.05), low=-12.0, crack=(0.5, 11), t60=1.0, dip=-5.0, far_lp=1800, mech_level=0.38),
-    '32acp': dict(high=2.0, thump=(180, 95, 0.06), low=-10.5, crack=(0.5, 12), t60=1.1, dip=-4.5, far_lp=1600, mech_level=0.40),
-    '380acp': dict(high=1.5, thump=(160, 80, 0.07), low=-9.0, crack=(0.45, 13), t60=1.2, dip=-4.0, far_lp=1500, mech_level=0.42),
-    '38spl': dict(high=0.0, thump=(140, 70, 0.09), low=-7.5, crack=(0.45, 14), t60=1.3, dip=-4.0, far_lp=1400, mech_level=0.0),
+    '22lr': dict(high=2.0, low=-10.0, t60=0.8, dip=-4.5, far_lp=1800, mech_level=0.30),
+    '22lr_rev': dict(high=1.5, low=-9.0, t60=0.9, dip=-4.5, far_lp=1800, mech_level=0.0),
+    '25acp': dict(high=1.5, low=-9.0, t60=0.9, dip=-4.5, far_lp=1800, mech_level=0.34),
+    '32acp': dict(high=1.0, low=-8.0, t60=1.0, dip=-4.0, far_lp=1600, mech_level=0.36),
+    '380acp': dict(high=0.5, low=-7.0, t60=1.1, dip=-3.5, far_lp=1500, mech_level=0.38),
+    '38spl': dict(high=-1.0, low=-6.0, t60=1.2, dip=-3.5, far_lp=1400, mech_level=0.0),
 }
 
 
@@ -207,37 +207,63 @@ def resample(x, ratio):
 
 
 # ---------------------------------------------------------------------------------------------------------------------- layers
+# Nothing here is a synthesised tone: body, snap, action and echoes are all taken from the recordings themselves.
+
+def onset_click(x, ms=6.0):
+    """the recording's own first milliseconds, spectrally flattened: a broadband snap that belongs to this shot"""
+    n = int(ms * SR / 1000)
+    h = x[:n] * np.hanning(2 * n)[n:]
+    X = np.fft.rfft(h, 4 * n)
+    mag = np.abs(X); sm = np.convolve(mag, np.ones(9) / 9, 'same') + 1e-6
+    y = np.fft.irfft(X / sm, 4 * n)[:n]
+    y = highpass(y, 1500, 2)
+    return y / (np.abs(y).max() + 1e-9)
+
+
+def blast_body(x, rng):
+    """low end of the muzzle blast: the recording's own first 50 ms below 250 Hz under a short envelope, plus one pressure pulse (no pitch, no ring)"""
+    n = int(0.05 * SR); t = np.arange(n) / SR
+    low = lowpass(x[:n], 250, 3) * (1 - np.exp(-t / 0.0005)) * np.exp(-t / 0.028)
+    f = rng.uniform(75, 100); m = int(SR / f)
+    pulse = np.zeros(n); tt = np.arange(m) / SR
+    pulse[:m] = np.sin(2 * np.pi * f * tt) * np.hanning(m)
+    y = low / (np.abs(low).max() + 1e-9) + 0.3 * pulse
+    return y / (np.abs(y).max() + 1e-9)
+
 
 def close_shot(src, cal, rng, variant):
-    """the recording, declipped, trimmed, re-balanced, with synthesised body and crack"""
+    """the recording, declipped, trimmed, re-balanced, with its onset sharpened and its blast's low end brought up"""
     x = declip(src)
     x = trim_onset(x)
     x = highpass(x, 45, 2)
     x = peaking(x, 1000, cal['dip'], q=0.9)
-    x = peaking(x, 300, -1.5, q=1.0)
-    x = shelf_high(x, 3500, 3.5)
+    x = peaking(x, 300, -1.0, q=1.0)
+    x = shelf_high(x, 3500, 3.0)
+    x = resample(x, 1 + rng.uniform(-0.02, 0.02)) if variant else x
     t = np.arange(len(x)) / SR
-    x = x * (1 + 0.5 * np.exp(-t / 0.012))                                   # attack emphasis
-    x = x * np.where(t > 0.04, np.exp(-(t - 0.04) / 0.16), 1.0)              # tighter decay
-    x = resample(x, 1 + rng.uniform(-0.025, 0.025)) if variant else x
+    x = x * (1 + 0.35 * np.exp(-t / 0.010))
+    x = x * np.where(t > 0.05, np.exp(-(t - 0.05) / 0.30), 1.0)
     n = max(len(x), int(0.9 * SR)); y = np.zeros(n); y[:len(x)] = x
     y = y / (np.abs(y).max() + 1e-9)
-    cr = crack(cal['crack'][1], rng)
-    lvl = cal['crack'][0]
-    for _ in range(6):                       # scale the crack so that 3-10 kHz sits `high` dB against 500-3000 Hz in the first 30 ms
-        z = place(y.copy(), cr, 0.0, lvl)
-        lvl *= db((cal['high'] - high_mid_db(z)) * 0.7)
-        lvl = float(np.clip(lvl, 0.0, 1.2))
-    y = place(y, cr, 0.0, lvl)
-    f0, f1, dur = cal['thump']
-    th = thump(f0 * rng.uniform(0.95, 1.05), f1, dur, rng)
+    t = np.arange(len(y)) / SR
+    drive = np.exp(-t / 0.008)                                               # harmonic saturation of the first milliseconds
+    y = np.tanh(y * (1 + 2.5 * drive)) / np.tanh(1 + 2.5 * drive) * (1 + 0.15 * drive) + y * 0.0
+    y = y / (np.abs(y).max() + 1e-9)
+    env = np.exp(-t / 0.025)                                                 # transient-only brightness: high shelf on the first 25 ms
+    y = y * (1 - env) + shelf_high(y, 3000, 8.0) * env
+    y = y / (np.abs(y).max() + 1e-9)
+    click = onset_click(y)
+    lvl = 0.5
+    for _ in range(8):
+        z = place(y.copy(), click, 0.0, lvl)
+        lvl *= db((cal['high'] - high_mid_db(z)) * 0.7); lvl = float(np.clip(lvl, 0.0, 2.5))
+    y = place(y, click, 0.0, lvl)
+    body = blast_body(y, rng)
     lvl = 0.3
-    for _ in range(6):                       # scale the body so that low (60-200 Hz) sits `low` dB against mid (500-3000 Hz) over the first 120 ms
-        z = place(y.copy(), th, 0.0005, lvl)
-        r = low_mid_db(z)
-        lvl *= db((cal['low'] - r) * 0.7)
-        lvl = float(np.clip(lvl, 0.03, 1.5))
-    y = place(y, th, 0.0005, lvl)
+    for _ in range(6):
+        z = place(y.copy(), body, 0.0, lvl)
+        lvl *= db((cal['low'] - low_mid_db(z)) * 0.7); lvl = float(np.clip(lvl, 0.0, 1.5))
+    y = place(y, body, 0.0, lvl)
     y = fade_out(y, 60)
     return soft_clip(normalize(y, -1.0))
 
@@ -257,57 +283,97 @@ def high_mid_db(x, ms=30):
     return 20 * np.log10(band_rms(h, 3000, 10000) / band_rms(h, 500, 3000))
 
 
-def mech_layer(cal, rng, auto=False):
-    """the action cycling after the shot: slide back, slide forward"""
-    n = int(0.32 * SR); y = np.zeros(n)
-    back = metallic_click(rng, (2600, 4100, 6300), (9, 7, 5))
-    fwd = metallic_click(rng, (1900, 3300, 5200), (14, 10, 6))
-    t_back = 0.038 if not auto else 0.022
-    t_fwd = (0.105 if not auto else 0.046) * rng.uniform(0.95, 1.05)
-    place(y, back, t_back, 0.7); place(y, fwd, t_fwd, 1.0)
-    thud = lowpass(rng.standard_normal(int(0.03 * SR)) * np.exp(-np.arange(int(0.03 * SR)) / (0.006 * SR)), 400, 2)
-    place(y, thud / (np.abs(thud).max() + 1e-9), t_fwd, 0.5)
+def extract_click(x, rng, length_ms=70, skip_ms=150):
+    """the sharpest metallic transient of a handling recording (the slide being worked), cut out and cleaned"""
+    hp = bandpass(x, 2000, 9000, 2)
+    w = int(0.004 * SR); e = np.convolve(hp ** 2, np.ones(w) / w, 'same')
+    e[:int(skip_ms * SR / 1000)] = 0
+    d = np.diff(e, prepend=0); d[d < 0] = 0
+    cands = np.argsort(d)[::-1]
+    picks = []
+    for i in cands:
+        if all(abs(i - j) > int(0.2 * SR) for j in picks):
+            picks.append(int(i))
+        if len(picks) >= 3:
+            break
+    i = picks[rng.integers(len(picks))]
+    i0 = max(0, i - int(0.0015 * SR)); n = int(length_ms * SR / 1000)
+    c = x[i0:i0 + n].copy()
+    if len(c) < n:
+        c = np.concatenate([c, np.zeros(n - len(c))])
+    c = highpass(c, 500, 2)
+    t = np.arange(n) / SR
+    c *= (1 - np.exp(-t / 0.0007)) * np.where(t > 0.03, np.exp(-(t - 0.03) / 0.012), 1.0)
+    return c / (np.abs(c).max() + 1e-9)
+
+
+def mech_layer(cal, rng, handling, auto=False):
+    """the action cycling after the shot, from the weapon's own unjam recording"""
+    n = int(0.3 * SR); y = np.zeros(n)
+    c1 = extract_click(handling, rng); c2 = extract_click(handling, rng)
+    place(y, c1, 0.036 if not auto else 0.02, 0.75)
+    place(y, c2, (0.1 if not auto else 0.044) * rng.uniform(0.95, 1.05), 1.0)
     y = fade_out(y, 40)
     return normalize(y, -1.0) * cal['mech_level'] / 0.36
 
 
+def echo_ir(t60, rng, n_early=14, length=None, stereo=False, lp_start=6000, lp_end=1500, dense=0.2):
+    """gunshot echo: sparse, discrete reflections of decreasing brightness over a low dense bed"""
+    length = length or int(t60 * 1.4 * SR); t = np.arange(length) / SR
+    ch = 2 if stereo else 1
+    out = np.zeros((length, ch))
+    delays = np.sort(np.concatenate([rng.uniform(0.012, 0.09, n_early // 2), rng.uniform(0.09, t60 * 0.9, n_early - n_early // 2)]))
+    for c in range(ch):
+        y = np.zeros(length)
+        for d in delays:
+            i = int(d * SR * (1 + (rng.uniform(-0.03, 0.03) if stereo else 0)))
+            w = int(rng.uniform(0.003, 0.009) * SR)
+            if i + w >= length:
+                continue
+            frac = d / max(t60, 1e-3)
+            burst = rng.standard_normal(w) * np.hanning(w)
+            burst = lowpass(burst, lp_start * (lp_end / lp_start) ** min(frac, 1), 2)
+            y[i:i + w] += burst / (np.abs(burst).max() + 1e-9) * np.exp(-6.91 * d / t60) * rng.uniform(0.6, 1.0)
+        bed = rng.standard_normal(length) * np.exp(-6.91 * t / t60) * (1 - np.exp(-t / 0.02))
+        bed = lowpass(bed, 2500, 2)
+        y += dense * bed / (np.abs(bed).max() + 1e-9)
+        out[:, c] = y
+    out /= np.abs(out).max() + 1e-9
+    return out[:, 0] if not stereo else out
+
+
 def tail_layer(close, cal, rng, stereo=False, auto=False):
+    """the shot echoing off the surroundings: the recording's own first 150 ms, convolved with a sparse echo response"""
     t60 = cal['t60'] * (0.65 if auto else 1.0) * rng.uniform(0.92, 1.08)
-    ir = synth_ir(t60, rng, stereo=stereo, bright=1.0)
-    head = highpass(close[:int(0.06 * SR)], 300, 2) * np.linspace(1, 0, int(0.06 * SR)) ** 0.5
+    ir = echo_ir(t60, rng, stereo=stereo)
+    head = highpass(close[:int(0.15 * SR)], 250, 2) * np.linspace(1, 0, int(0.15 * SR)) ** 0.7
     if stereo:
         y = np.stack([convolve(head, ir[:, c]) for c in range(2)], 1)
+        y = np.stack([fade_out(highpass(y[:, c], 180, 2), 120) for c in range(2)], 1)
     else:
-        y = convolve(head, ir)
-    y = highpass(y, 180, 2) if not stereo else np.stack([highpass(y[:, c], 180, 2) for c in range(2)], 1)
-    y = y[:int((t60 * 1.5) * SR)]
-    y = fade_out(y, 120) if not stereo else np.stack([fade_out(y[:, c], 120) for c in range(2)], 1)
-    return soft_clip(normalize(y, -9.0))
+        y = fade_out(highpass(convolve(head, ir), 180, 2), 120)
+    y = y[:int(t60 * 1.4 * SR)]
+    return soft_clip(normalize(y, -10.0))
 
 
 def far_layer(close, cal, rng, auto=False):
-    """distant report: low-passed pop with a long dark tail and a slapback or two"""
-    t60 = cal['t60'] * 1.1 * (0.6 if auto else 1.0)
-    ir = synth_ir(t60, rng, bright=0.5, early=False)
-    pop = bandpass(close[:int(0.08 * SR)], 150, cal['far_lp'], 3)
-    y = convolve(pop, ir)
-    for d, g in ((0.19, 0.3), (0.33, 0.18)):
-        y = place(y, lowpass(pop, cal['far_lp'] * 0.7, 3), d * rng.uniform(0.9, 1.1), g)
-    y = y[:int(t60 * 1.3 * SR)]
-    y = fade_out(y, 150)
-    return soft_clip(normalize(y, -17.0))
+    """the distant report: the same echo response, longer and darker, on a band-limited shot"""
+    t60 = cal['t60'] * 1.2 * (0.6 if auto else 1.0)
+    ir = echo_ir(t60, rng, n_early=10, lp_start=2500, lp_end=600, dense=0.35)
+    pop = bandpass(close[:int(0.1 * SR)], 150, cal['far_lp'], 3)
+    y = fade_out(convolve(pop, ir)[:int(t60 * 1.3 * SR)], 150)
+    return soft_clip(normalize(y, -18.0))
 
 
 def actor_shot(close, rng):
-    """the player's own shot: stereo width from a small per-channel tilt and a touch of early room (no inter-channel delay, so it sums to mono cleanly)"""
+    """the player's own shot: a small per-channel tilt and a few early reflections, no inter-channel delay"""
     L = peaking(close, 2500, 1.0, 1.0); R = peaking(close, 2500, -1.0, 1.0)
     L = peaking(L, 500, -0.8, 1.0); R = peaking(R, 500, 0.8, 1.0)
-    ir = synth_ir(0.25, rng, length=int(0.16 * SR), stereo=True, bright=1.0)
-    head = close[:int(0.03 * SR)]
+    ir = echo_ir(0.3, rng, n_early=6, length=int(0.18 * SR), stereo=True, dense=0.08)
+    head = highpass(close[:int(0.03 * SR)], 300, 2)
     room = np.stack([convolve(head, ir[:, c]) for c in range(2)], 1)
     n = max(len(L), len(room)); y = np.zeros((n, 2)); y[:len(L), 0] = L; y[:len(R), 1] = R
-    room = np.stack([highpass(room[:, c], 250, 2) for c in range(2)], 1)
-    y[:len(room)] += room * 0.05
+    y[:len(room)] += room * 0.07
     return soft_clip(normalize(y, -1.0))
 
 
@@ -328,8 +394,9 @@ def build_weapon(key, w, out_dir):
     for i in range(3):
         c = close_shot(src, cal, rng, i); closes.append(c); put('close', i + 1, c, 'npc_close')
     if w['mech']:
+        handling = oggx.decode(os.path.join(SND, w['folder'], w['unjam']))
         for i in range(2):
-            put('mech', i + 1, mech_layer(cal, rng, auto), 'npc_mech')
+            put('mech', i + 1, mech_layer(cal, rng, handling, auto), 'npc_mech')
     for i in range(3):
         put('tail', i + 1, tail_layer(closes[i], cal, rng, auto=auto), 'npc_tail')
     for i in range(2):
