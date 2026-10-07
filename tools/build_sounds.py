@@ -39,12 +39,12 @@ WEAPONS = {
 
 # calibre profile: body thump (f start, f end, seconds) scaled so that 60-200 Hz sits `low` dB against 500-3000 Hz in the first 120 ms, crack (level, decay ms), reverb T60 s, mid dip dB, far low-pass Hz
 CAL = {
-    '22lr': dict(high=1.0, thump=(190, 95, 0.08), low=-4.0, crack=(0.55, 10), t60=1.1, dip=-5.0, far_lp=1100, mech_level=0.28),
-    '22lr_rev': dict(high=0.5, thump=(175, 85, 0.09), low=-3.0, crack=(0.6, 11), t60=1.2, dip=-5.0, far_lp=1100, mech_level=0.0),
-    '25acp': dict(high=0.0, thump=(180, 90, 0.09), low=-3.0, crack=(0.5, 11), t60=1.2, dip=-5.0, far_lp=1100, mech_level=0.32),
-    '32acp': dict(high=0.0, thump=(150, 75, 0.11), low=-1.5, crack=(0.5, 12), t60=1.4, dip=-4.5, far_lp=1000, mech_level=0.34),
-    '380acp': dict(high=-1.0, thump=(130, 65, 0.13), low=0.0, crack=(0.45, 13), t60=1.5, dip=-4.0, far_lp=900, mech_level=0.36),
-    '38spl': dict(high=-2.5, thump=(115, 55, 0.15), low=1.5, crack=(0.45, 14), t60=1.7, dip=-4.0, far_lp=800, mech_level=0.0),
+    '22lr': dict(high=3.0, thump=(230, 120, 0.045), low=-13.0, crack=(0.55, 10), t60=0.9, dip=-5.0, far_lp=1800, mech_level=0.34),
+    '22lr_rev': dict(high=2.5, thump=(210, 110, 0.05), low=-12.0, crack=(0.6, 11), t60=1.0, dip=-5.0, far_lp=1800, mech_level=0.0),
+    '25acp': dict(high=2.5, thump=(210, 110, 0.05), low=-12.0, crack=(0.5, 11), t60=1.0, dip=-5.0, far_lp=1800, mech_level=0.38),
+    '32acp': dict(high=2.0, thump=(180, 95, 0.06), low=-10.5, crack=(0.5, 12), t60=1.1, dip=-4.5, far_lp=1600, mech_level=0.40),
+    '380acp': dict(high=1.5, thump=(160, 80, 0.07), low=-9.0, crack=(0.45, 13), t60=1.2, dip=-4.0, far_lp=1500, mech_level=0.42),
+    '38spl': dict(high=0.0, thump=(140, 70, 0.09), low=-7.5, crack=(0.45, 14), t60=1.3, dip=-4.0, far_lp=1400, mech_level=0.0),
 }
 
 
@@ -179,7 +179,7 @@ def synth_ir(t60, rng, length=None, bright=1.0, stereo=False, early=True):
             w = np.zeros(length); w[a:b] = 1
             if s > 0: w[max(0, a - 2000):a] = np.linspace(0, 1, min(2000, a))[-(a - max(0, a - 2000)):]
             if s < segs - 1: w[b:min(length, b + 2000)] = np.linspace(1, 0, min(2000, length - b))
-            fc = (6500 * bright) * (0.64 ** s) + 400
+            fc = (6500 * bright) * (0.70 ** s) + 900
             y += lowpass(noise * w, fc, 2)
         y *= (1 - np.exp(-t / 0.004))
         if early:
@@ -214,8 +214,11 @@ def close_shot(src, cal, rng, variant):
     x = trim_onset(x)
     x = highpass(x, 45, 2)
     x = peaking(x, 1000, cal['dip'], q=0.9)
-    x = peaking(x, 300, 1.5, q=1.0)
-    x = shelf_high(x, 3500, 2.5)
+    x = peaking(x, 300, -1.5, q=1.0)
+    x = shelf_high(x, 3500, 3.5)
+    t = np.arange(len(x)) / SR
+    x = x * (1 + 0.5 * np.exp(-t / 0.012))                                   # attack emphasis
+    x = x * np.where(t > 0.04, np.exp(-(t - 0.04) / 0.16), 1.0)              # tighter decay
     x = resample(x, 1 + rng.uniform(-0.025, 0.025)) if variant else x
     n = max(len(x), int(0.9 * SR)); y = np.zeros(n); y[:len(x)] = x
     y = y / (np.abs(y).max() + 1e-9)
@@ -270,29 +273,29 @@ def mech_layer(cal, rng, auto=False):
 
 def tail_layer(close, cal, rng, stereo=False, auto=False):
     t60 = cal['t60'] * (0.65 if auto else 1.0) * rng.uniform(0.92, 1.08)
-    ir = synth_ir(t60, rng, stereo=stereo, bright=0.9)
-    head = close[:int(0.06 * SR)] * np.linspace(1, 0, int(0.06 * SR)) ** 0.5
+    ir = synth_ir(t60, rng, stereo=stereo, bright=1.0)
+    head = highpass(close[:int(0.06 * SR)], 300, 2) * np.linspace(1, 0, int(0.06 * SR)) ** 0.5
     if stereo:
         y = np.stack([convolve(head, ir[:, c]) for c in range(2)], 1)
     else:
         y = convolve(head, ir)
-    y = highpass(y, 70, 2) if not stereo else np.stack([highpass(y[:, c], 70, 2) for c in range(2)], 1)
-    y = y[:int((t60 * 1.6) * SR)]
+    y = highpass(y, 180, 2) if not stereo else np.stack([highpass(y[:, c], 180, 2) for c in range(2)], 1)
+    y = y[:int((t60 * 1.5) * SR)]
     y = fade_out(y, 120) if not stereo else np.stack([fade_out(y[:, c], 120) for c in range(2)], 1)
-    return soft_clip(normalize(y, -7.0))
+    return soft_clip(normalize(y, -9.0))
 
 
 def far_layer(close, cal, rng, auto=False):
     """distant report: low-passed pop with a long dark tail and a slapback or two"""
-    t60 = cal['t60'] * 1.3 * (0.6 if auto else 1.0)
-    ir = synth_ir(t60, rng, bright=0.35, early=False)
-    pop = lowpass(close[:int(0.08 * SR)], cal['far_lp'], 3)
+    t60 = cal['t60'] * 1.1 * (0.6 if auto else 1.0)
+    ir = synth_ir(t60, rng, bright=0.5, early=False)
+    pop = bandpass(close[:int(0.08 * SR)], 150, cal['far_lp'], 3)
     y = convolve(pop, ir)
-    for d, g in ((0.19, 0.35), (0.33, 0.22)):
+    for d, g in ((0.19, 0.3), (0.33, 0.18)):
         y = place(y, lowpass(pop, cal['far_lp'] * 0.7, 3), d * rng.uniform(0.9, 1.1), g)
-    y = y[:int(t60 * 1.4 * SR)]
+    y = y[:int(t60 * 1.3 * SR)]
     y = fade_out(y, 150)
-    return soft_clip(normalize(y, -12.0))
+    return soft_clip(normalize(y, -17.0))
 
 
 def actor_shot(close, rng):
