@@ -249,8 +249,9 @@ def close_shot(src, cal, rng, variant):
     drive = np.exp(-t / 0.008)                                               # harmonic saturation of the first milliseconds
     y = np.tanh(y * (1 + 2.5 * drive)) / np.tanh(1 + 2.5 * drive) * (1 + 0.15 * drive) + y * 0.0
     y = y / (np.abs(y).max() + 1e-9)
-    env = np.exp(-t / 0.025)                                                 # transient-only brightness: high shelf on the first 25 ms
-    y = y * (1 - env) + shelf_high(y, 3000, 8.0) * env
+    env = np.exp(-t / 0.025)                                                 # transient-only brightness: high shelf on the first 25 ms, only as much as the recording lacks
+    gain = float(np.clip(cal['high'] - high_mid_db(y) + 1.0, 0.0, 8.0))
+    y = y * (1 - env) + shelf_high(y, 3000, gain) * env
     y = y / (np.abs(y).max() + 1e-9)
     click = onset_click(y)
     lvl = 0.5
