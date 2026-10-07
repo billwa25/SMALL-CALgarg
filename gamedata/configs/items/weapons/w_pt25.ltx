@@ -1,0 +1,294 @@
+;------------------------------------------------------------------------------------------------
+[wpn_pt25]:identity_immunities,weapon_probability,default_weapon_params,wpn_pm_sounds
+        GroupControlSection         = spawn_group
+        $npc                        = on
+        $prefetch                   = 8
+        $spawn                      = "weapons\pm"
+	parent_section              = wpn_pt25
+        scheduled                   = off
+        cform                       = skeleton
+        
+        class                       = WP_PM
+        slot                        = 1
+        animation_slot              = 1
+        ef_weapon_type              = 5
+        hand_dependence             = 1
+        single_handed               = 1
+        
+        default_to_ruck             = false
+        sprint_allowed              = true
+
+icons_texture                                       = ui\wpn_pts
+upgr_icon_path                           = ui\wpn_pts         
+inv_grid_width     = 2
+inv_grid_height    = 1
+inv_grid_x         = 0
+inv_grid_y         = 0
+
+
+        inv_name                    = st_wpn_pt25
+        inv_name_short              = st_wpn_pt25
+        description                 = st_wpn_pt25_descr
+        
+        kind                        = w_pistol
+        inv_weight                  = 0.35
+        cost                        = 3600
+        repair_type                 = pistol
+        
+        hud                         = wpn_pt25_hud
+        visual                      = dynamics\weapons\wpn_pt25\wpn_pt25.ogf
+        fire_point                       = 0.008581, 0.103336, 0.096645
+        orientation                      = 0, 0, 13.15952
+        position                         = -0.040741, -0.078876, 0.01288
+        ph_mass                     = 1
+        
+        flame_particles             = weapons\generic_weapon03
+        smoke_particles             = weapons\generic_shoot_00
+		
+		shell_point		 			= 0.0, 0.133, 0.047
+		shell_dir		 			= 0.0, 0.0, 0.4
+		;shell_particles	 			= weapons\9x18
+
+        light_color                 = 0.6, 0.5, 0.3
+        light_range                 = 3.0
+        light_time                  = 0.2
+        light_var_color             = 0.05
+        light_var_range             = 0.5
+
+	scopes 			                         = stendokit
+        
+        upgrades                    = up_gr_firstab_pt25, up_gr_seconab_pm, up_gr_thirdab_pm, up_gr_fourtab_pm, up_gr_fifthab_pt25
+        installed_upgrades          =
+        upgrade_scheme              = upgrade_scheme_pm
+        upgr_icon_x                 = 50
+        upgr_icon_y                 = 250
+        upgr_icon_width             = 150
+        upgr_icon_height            = 150
+        
+        fire_modes                  = 1
+        ammo_class                  = ammo_25acp_fmj
+        ammo_elapsed                = 9
+        ammo_mag_size               = 9
+        
+        scope_status                = 0
+        scope_zoom_factor           = 0
+        
+        silencer_name               = wpn_sil_25acp
+        silencer_status             = 2
+        silencer_x                  = 67
+        silencer_y                  = -18
+        silencer_light_color        = 0.6, 0.5, 0.3
+        silencer_light_range        = 0.01
+        silencer_light_time         = 0.2
+       silencer_light_var_color    = 0.05
+        silencer_light_var_range    = 0.5
+        silencer_smoke_particles    = weapons\generic_shoot_00
+        
+        grenade_launcher_status     = 0
+        
+        hit_impulse                 = 10
+        hit_power                   = 0.30, 0.30, 0.30, 0.30
+        hit_type                    = fire_wound
+        fire_distance               = 300
+        bullet_speed                = 290
+        rpm                         = 500
+        rpm_empty_click             = 120
+        
+        use_aim_bullet              = false
+        time_to_aim                 = 0.0 ;  1.0
+        zoom_dof                    = -1000, 1.0, 1000
+        zoom_enabled                = true
+        zoom_rotate_time            = 0.25
+        reload_dof                  = 0.0, 0.5, 5, 1.7
+control_inertion_factor = 1.0f
+        crosshair_inertion          = 2.3
+        fire_dispersion_base        = 0.62
+        fire_dispersion_condition_factor = 0.001
+        
+        misfire_probability         = 0.005
+        misfire_start_condition     = 0.68 ;  0.81
+        misfire_start_prob          = 0.007
+        misfire_end_condition       = 0.1
+        misfire_end_prob            = 0.11
+        
+        condition_queue_shot_dec    = 0.0011
+        condition_shot_dec          = 0.0011
+        
+        cam_return                  = 0
+        cam_relax_speed             = 8
+        cam_dispersion              = 2.0
+        cam_dispersion_frac         = 1.1
+        cam_dispersion_inc          = 0.0
+        cam_max_angle               = 50.0
+        cam_max_angle_horz          = 50.0
+        cam_step_angle_horz         = 0.52
+		zoom_cam_dispersion         = 1.5
+        
+        PDM_disp_accel_factor       = 1.055
+        PDM_disp_base               = 0.6
+        PDM_disp_crouch             = 1.0
+        PDM_disp_crouch_no_acc      = 1.0
+        PDM_disp_vel_factor         = 1.05
+        
+        cam_relax_speed_ai          = 360
+        holder_fov_modifier         = 1.0
+        holder_range_modifier       = 1.0
+        min_radius                  = 0
+        max_radius                  = 500
+        hit_probability_gd_novice   = 1.00
+        hit_probability_gd_stalker  = 1.00
+        hit_probability_gd_veteran  = 1.00
+        hit_probability_gd_master   = 1.00
+        
+        kill_msg_x                  = 227
+        kill_msg_y                  = 82
+        kill_msg_width              = 27
+        kill_msg_height             = 23
+		weapon_lower_speed			= 0.2
+		
+shell_point		    = 0.010500,0.093250,-0.030006
+;shell_point			    = 0.013000,0.046000,-0.034364
+shell_dir		 		= 0,0,0.4
+;shell_particles	 	    = weapons\9x18
+
+;---------------------------------------------------------------------SND-------------------------------------------------------------------------------
+snd_draw				= weapons\taurus_pts\pt25_draw
+snd_holster				= weapons\taurus_pts\pt25_holster
+
+snd_shoot				= weapons\taurus_pts\25acp_shoot
+snd_shoot_actor				= weapons\taurus_pts\25acp_shoot
+
+snd_reload				= weapons\taurus_pts\pt25_reload
+snd_reload_empty			= weapons\taurus_pts\pt25_reload_empty
+snd_reload_misfire			= weapons\taurus_pts\pt25_unjam
+snd_bore				= weapons\taurus_pts\pt25_inspect_open
+
+;--------------------------------------------------------------------HUD--------------------------------------------------------------------------------
+[wpn_pt25_hud]:hud_base
+
+        item_visual                 = anomaly_weapons\wpn_pt25\wpn_pt25_hud.ogf
+		
+        attach_place_idx            = 0
+        zoom_hide_crosshair         = true
+      
+item_position				= 0,0,0
+item_orientation			= 0,0,0 
+
+        aim_hud_offset_pos               = -0.062314, 0.02864, -0.061423
+        aim_hud_offset_pos_16x9          = -0.062314, 0.02864, -0.061423
+
+        aim_hud_offset_rot               = 0.015207, 0.000313, 0
+        aim_hud_offset_rot_16x9          = 0.015207, 0.000313, 0
+
+        gl_hud_offset_pos                = 0, 0, 0
+        gl_hud_offset_pos_16x9           = 0, 0, 0
+
+        hands_orientation                = 0, 0, 0
+        hands_orientation_16x9           = 0, 0, 0
+
+        hands_position                   = -0.022028, 0.03171, -0.072894
+        hands_position_16x9              = -0.022028, 0.03171, -0.072894
+       
+		safemode_anm				= 
+		safemode_anm2				= 
+		
+        lowered_hud_offset_pos           = 0.004535, 0.009107, 0
+        lowered_hud_offset_pos_16x9      = 0.004535, 0.009107, 0
+        lowered_hud_offset_rot           = 0.311377, -0.100212, 0.169691
+        lowered_hud_offset_rot_16x9      = 0.311377, -0.100212, 0.169691
+		
+        
+        gl_hud_offset_pos           = 0, 0, 0
+        gl_hud_offset_rot           = 0, 0, 0
+        
+        lean_hud_offset_pos         = 0, 0, 0
+        lean_hud_offset_rot         = 0, 0, 0
+     
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+anm_hide                                 = hand_pt25_holster, pt25_idle
+anm_hide_empty                           = hand_pt25_holster, pt25_idle
+anm_idle                                 = hand_pt25_idle, pt25_idle
+anm_idle_empty                           = hand_pt25_idle, pt25_idle
+anm_idle_aim                             = hand_pt25_aim, pt25_idle
+anm_idle_aim_empty                       = hand_pt25_aim, pt25_idle
+anm_idle_aim_moving                      = hand_pt25_walk, pt25_idle, 0.75
+anm_idle_aim_moving_crouch               = hand_pt25_walk, pt25_idle
+anm_idle_aim_moving_crouch_empty         = hand_pt25_walk, pt25_idle
+anm_idle_aim_moving_empty                = hand_pt25_walk, pt25_idle, 0.7
+anm_idle_moving                          = hand_pt25_walk, pt25_idle
+anm_idle_moving_crouch                   = hand_pt25_walk, pt25_idle
+anm_idle_moving_crouch_empty             = hand_pt25_walk, pt25_idle
+anm_idle_moving_empty                    = hand_pt25_walk, pt25_idle
+anm_idle_sprint                          = hand_pt25_sprint, pt25_idle
+anm_idle_sprint_empty                    = hand_pt25_sprint, pt25_idle
+anm_reload                               = hand_pt25_reload, pt25_reload
+anm_reload_empty                         = hand_pt25_reload_empty, pt25_reload_empty 
+anm_reload_misfire                       = hand_pt25_unjam, pt25_unjam
+
+anm_shot_l                               = hand_pt25_shoot, pt25_shoot_last
+anm_shots                                = hand_pt25_shoot, pt25_shoot
+anm_shot_aim_l                           = hand_pt25_shoot_aim, pt25_shoot_last
+anm_shots_aim                            = hand_pt25_shoot_aim, pt25_shoot
+
+anm_show                                 = hand_pt25_draw, pt25_idle
+anm_show_empty                           = hand_pt25_draw, pt25_idle
+anm_bore                                 = hand_pt25_inspect, pt25_inspect
+anm_bore_empty                           = hand_pt25_inspect, pt25_inspect_empty
+
+
+
+anm_hide_jammed                        = hand_pt25_holster, pt25_idle_jam         
+anm_idle_jammed                        = hand_pt25_idle, pt25_idle_jam
+anm_idle_aim_jammed                    = hand_pt25_aim, pt25_idle_jam
+anm_idle_aim_moving_jammed             = hand_pt25_walk, pt25_idle_jam, 0.75
+anm_idle_aim_moving_crouch_jammed      = hand_pt25_walk, pt25_idle_jam,  0.7
+anm_idle_moving_jammed                 = hand_pt25_walk, pt25_idle_jam
+anm_idle_moving_crouch_jammed          = hand_pt25_walk, pt25_idle_jam, 0.7
+anm_idle_sprint_jammed                 = hand_pt25_sprint, pt25_idle_jam
+anm_show_jammed                        = hand_pt25_draw, pt25_idle_jam
+anm_bore_jammed                        = hand_pt25_inspect_jam, pt25_inspect_jam
+
+        anm_sprint_start             = hand_pt25_holster
+        anm_sprint_end               = hand_pt25_draw
+	anm_sprint_start_empty       = hand_pt25_holster, pt25_idle
+        anm_sprint_end_empty         = hand_pt25_draw, pt25_idle
+
+	anm_sprint_start_jammed      = hand_pt25_holster, pt25_idle_jam   
+	anm_sprint_end_jammed        = hand_pt25_draw, pt25_idle_jam		
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+
+        
+shell_dir		 		= 0,0,0.4 
+
+;----
+shell_point						= 0,0,0.25 
+shell_bone              		= wpn_body
+
+fire_point						= 0,0,0
+fire_bone               		= muzzle
+
+lowered_hud_offset_pos_16x9				 = 0,0,0
+lowered_hud_offset_rot_16x9				 = 0.3,-0.1,0.1
+
+
+;------------------------------------------------------------------------------------------------
+[wpn_pt25_stendokit]:wpn_pt25
+	parent_section              = wpn_pt25_stendokit
+	inv_grid_x         = 2
+        hud                         = wpn_pt25_stendo_hud
+        description                 = st_wpn_pt25stendo_descr
+        ammo_elapsed                = 15
+        ammo_mag_size               = 15
+        visual                      = dynamics\weapons\wpn_pt25\wpn_pt25_stendo_world.ogf	
+
+;------------------------------------------------------------------------------------------------
+[wpn_pt25_stendo_hud]:wpn_pt25_hud
+        item_visual                 = anomaly_weapons\wpn_pt25\wpn_pt25_stendo_hud.ogf
+
+anm_reload                               = hand_pt25_reload_stendo, pt25_reload
+anm_reload_empty                         = hand_pt25_reload_stendo_empty, pt25_reload_empty 
+
+

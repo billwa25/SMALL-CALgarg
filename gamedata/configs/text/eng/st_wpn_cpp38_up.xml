@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+	<string id="st_up_add_357conv_name">
+		<text>Titanium-Lined Cylinder</text>
+	</string>
+	<string id="st_up_add_357conv_descr">
+		<text>Installation of a modified revolver cylinder, allowing the weapon to be able to withstand higher bullet pressures and hotter loads.</text>
+	</string>	
+
+</string_table>

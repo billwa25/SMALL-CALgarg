@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+<string id="st_wpn_rem51">
+		<text>Remington Model 51</text>
+	</string>
+	<string id="st_wpn_rem51_descr">
+		<text>The Remington Model 51 is a semi-automatic pistol designed by John Pedersen and produced by Remington Arms between 1918 and 1926. Chambered in .380 ACP (as well as .32 ACP in some variants), the Model 51 is known for its unique hesitation-locked action, which provides low recoil and smooth operation. Its sleek, ergonomic design was considered ahead of its time, offering excellent pointability and concealability. Despite its innovative engineering, the Model 51 saw limited commercial success but remains a respected collector's piece today. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Remington Arms Company\n
+		</text>
+	</string>
+<string id="st_wpn_rem51stendo_descr">
+		<text>The Remington Model 51 is a semi-automatic pistol designed by John Pedersen and produced by Remington Arms between 1918 and 1926. Chambered in .380 ACP (as well as .32 ACP in some variants), the Model 51 is known for its unique hesitation-locked action, which provides low recoil and smooth operation. Its sleek, ergonomic design was considered ahead of its time, offering excellent pointability and concealability. Despite its innovative engineering, the Model 51 saw limited commercial success but remains a respected collector's piece today. \n \n
+		This weapon has been fitted with a 16 round magazine.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Remington Arms Company\n
+		</text>
+	</string>	
+
+</string_table>

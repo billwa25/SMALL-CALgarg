@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+	<string id="st_up_add_380acpconv_magsize_name">
+		<text>Change of calibre to 380ACP</text>
+	</string>
+	<string id="st_up_add_380acpconv_magsize_descr">
+		<text>A new barrel chambered for .380ACP, allowing for the changing of a smaller caliber, with a small penalty to reliability and smaller amount of rounds in the magazine..</text>
+	</string>
+	<string id="st_up_add_sav1907stendo_name">
+		<text>Extended Magazine</text>
+	</string>
+	<string id="st_up_add_sav1907stendo_descr">
+		<text>An extended magazine, with a capacity of 20 shots is fitted in the gun.</text>
+	</string>		
+
+</string_table>

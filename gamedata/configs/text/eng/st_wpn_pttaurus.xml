@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+<string id="st_wpn_pt25">
+		<text>Taurus PT-25</text>
+	</string>
+	<string id="st_wpn_pt25_descr">
+		<text>The Taurus PT-25 is a compact, semi-automatic pistol manufactured by Taurus International, designed primarily for concealed carry and personal defense. Chambered in .25 ACP, the PT-25 features a unique tip-up barrel design, allowing easy chamber loading without slide manipulation. It operates on a simple blowback system and offers a double-action-only (DAO) trigger mechanism. With a capacity of 9 rounds, the PT-25 combines small size with ease of use, appealing to shooters looking for a lightweight and easily concealable backup firearm. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Taurus Armas S.A.\n
+		</text>
+	</string>
+	<string id="st_wpn_pt25stendo_descr">
+		<text>The Taurus PT-25 is a compact, semi-automatic pistol manufactured by Taurus International, designed primarily for concealed carry and personal defense. Chambered in .25 ACP, the PT-25 features a unique tip-up barrel design, allowing easy chamber loading without slide manipulation. It operates on a simple blowback system and offers a double-action-only (DAO) trigger mechanism. With a capacity of 9 rounds, the PT-25 combines small size with ease of use, appealing to shooters looking for a lightweight and easily concealable backup firearm. \n \n
+		This weapon has been fitted with a 15 round magazine.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Taurus Armas S.A.\n
+		</text>
+	</string>	
+
+<string id="st_wpn_pt22">
+		<text>Taurus PT-22</text>
+	</string>
+	<string id="st_wpn_pt22_descr">
+		<text>The Taurus PT-22 is a compact, semi-automatic pistol designed for concealed carry and recreational shooting. Chambered in .22 Long Rifle (LR), the PT-22 shares the same tip-up barrel design as its .25 ACP counterpart, the PT-25, allowing for easy loading and chamber inspection without needing to rack the slide. It operates on a simple blowback action and typically features a double-action-only (DAO) trigger system. With a magazine capacity of 8 rounds, the PT-22 is known for its lightweight build, low recoil, and ease of use, making it popular among beginners and those seeking a small, easily concealable handgun. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Taurus Armas S.A.\n
+		</text>
+	</string>
+	<string id="st_wpn_pt22stendo_descr">
+		<text>The Taurus PT-22 is a compact, semi-automatic pistol designed for concealed carry and recreational shooting. Chambered in .22 Long Rifle (LR), the PT-22 shares the same tip-up barrel design as its .25 ACP counterpart, the PT-25, allowing for easy loading and chamber inspection without needing to rack the slide. It operates on a simple blowback action and typically features a double-action-only (DAO) trigger system. With a magazine capacity of 8 rounds, the PT-22 is known for its lightweight build, low recoil, and ease of use, making it popular among beginners and those seeking a small, easily concealable handgun. \n \n
+		This weapon has been fitted with a 20 round magazine.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Taurus Armas S.A.\n
+		</text>
+	</string>	
+</string_table>

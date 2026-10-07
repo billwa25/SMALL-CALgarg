@@ -1,0 +1,280 @@
+;------------------------------------------------------------------------------------------------
+[wpn_sav1907]:identity_immunities,weapon_probability,default_weapon_params,wpn_pm_sounds
+        GroupControlSection         = spawn_group
+        $npc                        = on
+        $prefetch                   = 8
+        $spawn                      = "weapons\sav1907"
+	parent_section              = wpn_sav1907
+        scheduled                   = off
+        cform                       = skeleton
+        
+        class                       = WP_PM
+        slot                        = 1
+        animation_slot              = 1
+        ef_weapon_type              = 5
+        hand_dependence             = 1
+        single_handed               = 1
+        
+        default_to_ruck             = false
+        sprint_allowed              = true
+
+icons_texture                                       = ui\wpn_sav1907        
+inv_grid_width     = 2
+inv_grid_height    = 1
+inv_grid_x         = 0
+inv_grid_y         = 0
+
+
+        inv_name                    = st_wpn_sav1907
+        inv_name_short              = st_wpn_sav1907
+        description                 = st_wpn_sav1907_descr
+        
+        kind                        = w_pistol
+        inv_weight                  = 0.35
+        cost                        = 5100
+        repair_type                 = pistol
+        
+        hud                         = wpn_sav1907_hud
+        visual                      = dynamics\weapons\wpn_sav1907\wpn_sav1907_world.ogf
+        fire_point                       = 0.008056, 0.103679, 0.129632
+        position                         = -0.034785, -0.068764, 0.026808
+        orientation                      = 0, 0, 0
+        ph_mass                     = 1
+        
+        flame_particles             = weapons\generic_weapon03
+        smoke_particles             = weapons\generic_shoot_00
+		
+		shell_point		 			= 0.0, 0.133, 0.047
+		shell_dir		 			= 0.0, 0.0, 0.4
+		;shell_particles	 			= weapons\9x18
+
+        light_color                 = 0.6, 0.5, 0.3
+        light_range                 = 2.5
+        light_time                  = 0.15
+        light_var_color             = 0.05
+        light_var_range             = 0.5
+        
+        upgrades                    = up_gr_firstab_sav1907, up_gr_seconab_colt1911, up_gr_thirdab_colt1911, up_gr_fourtab_sav1907, up_gr_fifthab_sav1907
+        installed_upgrades          =
+        upgrade_scheme              = upgrade_scheme_colt1911
+		upgr_icon_path                           = ui\wpn_sav1907 
+        upgr_icon_x                 = 50
+        upgr_icon_y                 = 100
+        upgr_icon_width             = 150
+        upgr_icon_height            = 150
+
+	scopes 			                         = stendokit
+        
+        fire_modes                  = 1
+        ammo_class                  = ammo_32acp_fmj
+        ammo_elapsed                = 10
+        ammo_mag_size               = 10
+        
+        scope_status                = 0
+        scope_zoom_factor           = 0
+        
+        silencer_name               = wpn_sil_32acp
+        silencer_status             = 2
+        silencer_x                  = 75
+        silencer_y                  = -16
+        silencer_light_color        = 0.6, 0.5, 0.3
+        silencer_light_range        = 0.01
+        silencer_light_time         = 0.2
+       silencer_light_var_color    = 0.05
+        silencer_light_var_range    = 0.5
+        silencer_smoke_particles    = weapons\generic_shoot_00
+        
+        grenade_launcher_status     = 0
+        
+        hit_impulse                 = 20
+        hit_power                   = 0.4, 0.4, 0.4, 0.4
+        hit_type                    = fire_wound
+        fire_distance               = 300
+        bullet_speed                = 290
+        rpm                         = 480
+        rpm_empty_click             = 120
+        
+        use_aim_bullet              = false
+        time_to_aim                 = 0.0 ;  1.0
+        zoom_dof                    = -1000, 1.0, 1000
+        zoom_enabled                = true
+        zoom_rotate_time            = 0.25
+        reload_dof                  = 0.0, 0.5, 5, 1.7
+	control_inertion_factor = 1.0f
+        crosshair_inertion          = 2.3
+        fire_dispersion_base        = 0.62
+        fire_dispersion_condition_factor = 0.001
+        
+        misfire_probability         = 0.005
+        misfire_start_condition     = 0.75 ;  0.81
+        misfire_start_prob          = 0.007
+        misfire_end_condition       = 0.1
+        misfire_end_prob            = 0.11
+        
+        condition_queue_shot_dec    = 0.0014
+        condition_shot_dec          = 0.0014
+        
+        cam_return                  = 0
+        cam_relax_speed             = 8
+        cam_dispersion              = 2.0
+        cam_dispersion_frac         = 1.1
+        cam_dispersion_inc          = 0.0
+        cam_max_angle               = 50.0
+        cam_max_angle_horz          = 50.0
+        cam_step_angle_horz         = 0.52
+		zoom_cam_dispersion         = 1.5
+        
+        PDM_disp_accel_factor       = 1.055
+        PDM_disp_base               = 0.6
+        PDM_disp_crouch             = 1.0
+        PDM_disp_crouch_no_acc      = 1.0
+        PDM_disp_vel_factor         = 1.05
+        
+        cam_relax_speed_ai          = 360
+        holder_fov_modifier         = 1.0
+        holder_range_modifier       = 1.0
+        min_radius                  = 0
+        max_radius                  = 500
+        hit_probability_gd_novice   = 1.00
+        hit_probability_gd_stalker  = 1.00
+        hit_probability_gd_veteran  = 1.00
+        hit_probability_gd_master   = 1.00
+        
+        kill_msg_x                  = 227
+        kill_msg_y                  = 82
+        kill_msg_width              = 27
+        kill_msg_height             = 23
+		weapon_lower_speed			= 0.2
+		
+;---------------------------------------------------------------------SND-------------------------------------------------------------------------------
+snd_draw				= weapons\sav1907\sav1907_draw_saf
+snd_holster				= weapons\sav1907\sav1907_holster_saf
+
+snd_shoot_actor				= weapons\sav1907\32acp_shoot
+snd_shoot				= weapons\sav1907\32acp_shoot
+
+snd_reload				= weapons\sav1907\sav1907_reload
+snd_reload_empty			= weapons\sav1907\sav1907_reload_empty
+snd_reload_misfire			= weapons\sav1907\sav1907_unjam
+;--------------------------------------------------------------------HUD--------------------------------------------------------------------------------
+[wpn_sav1907_hud]:hud_base
+
+        item_visual                 = anomaly_weapons\wpn_sav1907\wpn_sav1907_hud.ogf
+		
+        attach_place_idx            = 0
+        zoom_hide_crosshair         = true
+      
+item_position				= 0,0,0
+item_orientation			= 0,0,0 
+        aim_hud_offset_pos               = -0.084212, 0.038261, -0.076588
+        aim_hud_offset_pos_16x9          = -0.084212, 0.038261, -0.076588
+        aim_hud_offset_rot               = -0.008039, 0.000319, 0
+        aim_hud_offset_rot_16x9          = -0.008039, 0.000319, 0
+		
+		
+        gl_hud_offset_pos               = 0, 0, 0
+        gl_hud_offset_pos_16x9           = 0, 0, 0
+        hands_orientation                = 0, 0, 0
+        hands_orientation_16x9           = 0, 0, 0
+        hands_position		         	= 0, 0, -0.04
+        hands_position_16x9              = 0, 0, -0.04
+       
+		safemode_anm				= 
+		safemode_anm2				= 
+		
+        lowered_hud_offset_pos           = 0.015732, 0.031574, 0
+        lowered_hud_offset_pos_16x9      = 0.015732, 0.031574, 0
+        lowered_hud_offset_rot           = 0.328019, -0.09456, 0.1
+        lowered_hud_offset_rot_16x9      = 0.328019, -0.09456, 0.1
+		
+        
+        gl_hud_offset_pos           = 0, 0, 0
+        gl_hud_offset_rot           = 0, 0, 0
+        
+        lean_hud_offset_pos         = 0, 0, 0
+        lean_hud_offset_rot         = 0, 0, 0
+        
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+anm_hide                                 = hand_sav1907_holster, sav1907_holster
+anm_hide_empty                           = hand_sav1907_holster, sav1907_holster
+anm_idle                                 = hand_sav1907_idle, sav1907_idle
+anm_idle_empty                           = hand_sav1907_idle, sav1907_idle
+anm_idle_aim                             = hand_sav1907_aim, sav1907_idle
+anm_idle_aim_empty                       = hand_sav1907_aim, sav1907_idle
+anm_idle_aim_moving                      = hand_sav1907_walk, sav1907_idle, 0.75
+anm_idle_aim_moving_crouch               = hand_sav1907_walk, sav1907_idle
+anm_idle_aim_moving_crouch_empty         = hand_sav1907_walk, sav1907_idle
+anm_idle_aim_moving_empty                = hand_sav1907_walk, sav1907_idle, 0.7
+anm_idle_moving                          = hand_sav1907_walk, sav1907_idle
+anm_idle_moving_crouch                   = hand_sav1907_walk, sav1907_idle
+anm_idle_moving_crouch_empty             = hand_sav1907_walk, sav1907_idle
+anm_idle_moving_empty                    = hand_sav1907_walk, sav1907_idle
+anm_idle_sprint                          = hand_sav1907_sprint, sav1907_idle
+anm_idle_sprint_empty                    = hand_sav1907_sprint, sav1907_idle
+anm_reload                               = hand_sav1907_reload, sav1907_reload
+anm_reload_empty                         = hand_sav1907_reload_empty, sav1907_reload_empty 
+anm_reload_misfire                       = hand_sav1907_unjam, sav1907_unjam
+
+anm_shot_l                               = hand_sav1907_shoot, sav1907_shoot
+anm_shots                                = hand_sav1907_shoot, sav1907_shoot
+anm_shots_aim                            = hand_sav1907_shoot_aim, sav1907_shoot
+anm_shots_aim_l                          = hand_sav1907_shoot_aim, sav1907_shoot
+        
+anm_show                                 = hand_sav1907_draw, sav1907_idle
+anm_show_empty                           = hand_sav1907_draw, sav1907_idle
+anm_bore                                 = hand_sav1907_inspect, sav1907_idle
+anm_bore_empty                           = hand_sav1907_inspect, sav1907_idle
+
+
+anm_hide_jammed                        = hand_sav1907_holster, sav1907_idle_jam         
+anm_idle_jammed                        = hand_sav1907_idle, sav1907_idle_jam
+anm_idle_aim_jammed                    = hand_sav1907_aim, sav1907_idle_jam
+anm_idle_aim_moving_jammed             = hand_sav1907_walk, sav1907_idle_jam, 0.75
+anm_idle_aim_moving_crouch_jammed      = hand_sav1907_walk, sav1907_idle_jam,  0.7
+anm_idle_moving_jammed                 = hand_sav1907_walk, sav1907_idle_jam
+anm_idle_moving_crouch_jammed          = hand_sav1907_walk, sav1907_idle_jam, 0.7
+anm_idle_sprint_jammed                 = hand_sav1907_sprint, sav1907_idle_jam
+anm_show_jammed                        = hand_sav1907_draw, sav1907_idle_jam
+anm_bore_jammed                        = hand_sav1907_inspect, sav1907_idle_jam
+
+        anm_sprint_start             = hand_sav1907_holster
+        anm_sprint_end               = hand_sav1907_draw
+		anm_sprint_start_empty       = hand_sav1907_holster, sav1907_idle
+        anm_sprint_end_empty         = hand_sav1907_draw, sav1907_idle
+		anm_sprint_start_jammed      = hand_sav1907_holster, sav1907_idle_jam   
+		anm_sprint_end_jammed        = hand_sav1907_draw, sav1907_idle_jam
+		
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+
+        
+shell_dir		 		= 0,0,0.4 
+
+;----
+shell_point						= 0,0,0.25 
+shell_bone              		= wpn_body
+
+fire_point						= 0,0,0
+fire_bone               		= muzzle
+;------------------------------------------------------------------------------------------------
+[wpn_sav1907_stendokit]:wpn_sav1907
+	parent_section              = wpn_sav1907_stendokit
+	inv_grid_x         = 2
+        hud                         = wpn_sav1907_stendo_hud
+        description                 = st_wpn_sav1907stendo_descr
+        visual                      = dynamics\weapons\wpn_sav1907\wpn_sav1907_stendo_world.ogf
+        ammo_elapsed                = 20
+        ammo_mag_size               = 20
+
+;------------------------------------------------------------------------------------------------
+[wpn_sav1907_stendo_hud]:wpn_sav1907_hud
+
+        item_visual                 = anomaly_weapons\wpn_sav1907\wpn_sav1907_stendo_hud.ogf
+
+anm_reload                               = hand_sav1907_reload_stendo, sav1907_reload
+anm_reload_empty                         = hand_sav1907_reload_stendo_empty, sav1907_reload_stendo_empty 
+anm_bore                                 = hand_sav1907_inspect, sav1907_idle
+anm_bore_empty                           = hand_sav1907_inspect, sav1907_idle
+anm_bore_jammed                        = hand_sav1907_inspect, sav1907_idle_jam

@@ -1,0 +1,35 @@
+[up_sect_thirda_cpp38]
+cost                                     = 1890 
+value                                    = "357"
+ammo_class                               = ammo_357_hp_mag, ammo_357_hp_mag_bad, ammo_357_hp_mag_verybad, ammo_38spl_fmj
+
+inv_weight                               = +0.06
+
+
+
+;----------------------------------------------------------------------------------------------------------------------
+
+[up_thirda_cpp38]
+scheme_index                             = 0, 2
+known                                    = 1
+effects                                  =
+section                                  = up_sect_thirda_cpp38
+property                                 = prop_calibre
+
+precondition_functor                     = inventory_upgrades.precondition_functor_a
+precondition_parameter                   = a & b
+effect_functor                           = inventory_upgrades.effect_functor_a
+effect_parameter                         = something_here
+
+prereq_functor                           = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor                   = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params                            =
+name                                     = st_up_add_357conv_name
+description                              = st_up_add_357conv_descr
+icon                                     = ui_inGame2_upgrade_PMm_13
+
+
+
+;----------------------------------------------------------------------------------------------------------------------
+[up_gr_thirdab_cpp38]
+elements                                 = up_thirda_cpp38

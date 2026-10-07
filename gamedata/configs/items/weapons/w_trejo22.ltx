@@ -1,0 +1,288 @@
+a;------------------------------------------------------------------------------------------------
+[wpn_trejo22]:identity_immunities,weapon_probability,default_weapon_params,wpn_colt1911_sounds
+        GroupControlSection         = spawn_group
+        $npc                        = on
+        $prefetch                   = 8
+        $spawn                      = "weapons\trejo22"
+	parent_section              = wpn_trejo22
+        scheduled                   = off
+        cform                       = skeleton
+        class                       = WP_PM
+        slot                        = 1
+        animation_slot              = 1
+        ef_weapon_type              = 5
+        hand_dependence             = 1
+        single_handed               = 1
+        
+        default_to_ruck             = false
+        sprint_allowed              = true
+	use_alt_aim_hud                   		 = true
+        
+        inv_name                    = st_wpn_trejo22
+        inv_name_short              = st_wpn_trejo22
+        description                 = st_wpn_trejo22_descr
+        
+        kind                        = w_pistol
+        inv_weight                  = 0.620
+        cost                        = 13000
+        repair_type                 = pistol
+        
+        hud                         = wpn_trejo22_hud
+        visual                      = dynamics\weapons\wpn_trejo22\wpn_trejo22.ogf
+        position                         = -0.025811, -0.016281, 0.016213
+        orientation                      = -0.615681, -4.253014, 11.63433
+        fire_point                       = 0, 0.059951, 0.152599
+        fire_point2                 = 0, 0.133, 0.161
+        ph_mass                     = 1
+        
+        flame_particles             = weapons\generic_weapon03
+        smoke_particles             = weapons\generic_shoot_00
+        
+		shell_point		 	        = 0.0, 0.133, 0.047
+		shell_dir		 	        = 0.0, 0.0, 0.4
+		shell_particles	 		    = weapons\9x18
+
+        light_color                 = 0.6, 0.5, 0.3
+        light_range                 = 3.0
+        light_time                  = 0.1
+        light_var_color             = 0.05
+        light_var_range             = 0.5
+        
+        upgrades                    = up_gr_firstab_trejo22, up_gr_seconab_trejo22, up_gr_thirdab_fn57, up_gr_fourtab_fn57
+        installed_upgrades          =
+        upgrade_scheme              = upgrade_scheme_walther
+        upgr_icon_x                 = 1150
+        upgr_icon_y                 = 1100
+        upgr_icon_width             = 150
+        upgr_icon_height            = 100
+
+	icons_texture	= ui\ui_icon_trejo22
+
+	inv_grid_width     = 2
+	inv_grid_height    = 1
+	inv_grid_x         = 0
+	inv_grid_y         = 0
+
+	upgr_icon_path     = ui\ui_icon_trejo22
+
+	upgr_icon_x        = 50
+	upgr_icon_y        = 100
+	upgr_icon_width    = 150
+	upgr_icon_height   = 150
+
+	scopes 			                         = stendokit
+        
+        fire_modes                  = 1, -1
+        ammo_class                  = ammo_22lr_fmj
+        ammo_elapsed                = 8
+        ammo_mag_size               = 8
+        
+        scope_status                = 0
+        scope_zoom_factor           = 0
+        
+        silencer_status             = 2
+        silencer_name               = wpn_sil_22lr
+        silencer_x                  = 79
+        silencer_y                  = -15
+        silencer_light_color        = 0.6, 0.5, 0.3
+        silencer_light_range        = 0.01
+        silencer_light_time         = 0.2
+        silencer_light_var_color    = 0.05
+        silencer_light_var_range    = 0.5
+        silencer_smoke_particles    = weapons\generic_shoot_00
+        
+        grenade_launcher_status     = 0
+        
+        hit_impulse                 = 7
+        hit_power                   = 0.27, 0.27, 0.27, 0.27
+        hit_type                    = fire_wound
+        fire_distance               = 200
+        bullet_speed                = 370
+        rpm                         = 1300
+        rpm_empty_click             = 120
+        
+        use_aim_bullet              = false
+        time_to_aim                 = 0.0 ;  1.0
+        zoom_dof                    = -1000, 1.0, 1000
+        zoom_enabled                = true
+        zoom_rotate_time            = 0.25
+        reload_dof                  = 0.0, 0.5, 5, 1.7
+	control_inertion_factor = 1.0f
+        crosshair_inertion          = 3.8
+        fire_dispersion_base        = 0.5
+        fire_dispersion_condition_factor = 0.001
+        
+        misfire_probability         = 0.005
+        misfire_start_condition     = 0.65 ;  0.79
+        misfire_start_prob          = 0.006
+        misfire_end_condition       = 0.11
+        misfire_end_prob            = 0.11
+        
+        condition_queue_shot_dec    = 0.0004
+        condition_shot_dec          = 0.0004
+        
+
+        cam_return                  = 0
+        cam_relax_speed             = 8
+        cam_dispersion              = 0.8
+        cam_dispersion_frac         = 1.1
+        cam_dispersion_inc          = 0.0
+        cam_max_angle               = 50.0
+        cam_max_angle_horz          = 50.0
+        cam_step_angle_horz         = 0.02
+	zoom_cam_dispersion         = 0.1
+
+        
+        PDM_disp_accel_factor       = 1.055
+        PDM_disp_base               = 0.6
+        PDM_disp_crouch             = 1.0
+        PDM_disp_crouch_no_acc      = 1.0
+        PDM_disp_vel_factor         = 1.05
+		
+snd_draw				                                          = weapons\trejo22\trejo22_draw_saf
+snd_holster				                                          = weapons\trejo22\trejo22_holster_saf
+snd_reload				                                          = weapons\trejo22\trejo22_reload
+snd_reload_empty			                                      	= weapons\trejo22\trejo22_reload_empty
+snd_reload_misfire                                                		= weapons\trejo22\trejo22_unjam
+snd_shoot_actor  								= weapons\trejo22\22lr_pistol_shoot
+
+
+        cam_relax_speed_ai          = 360
+        holder_fov_modifier         = 1.0
+        holder_range_modifier       = 1.0
+        min_radius                  = 0
+        max_radius                  = 500
+        hit_probability_gd_novice   = 1.00
+        hit_probability_gd_stalker  = 1.00
+        hit_probability_gd_veteran  = 1.00
+        hit_probability_gd_master   = 1.00
+        
+        kill_msg_x                  = 161
+        kill_msg_y                  = 153
+        kill_msg_width              = 37
+        kill_msg_height             = 24
+		weapon_lower_speed			= 0.2
+		
+;------------------------------------------------------------------------------------------------
+[wpn_trejo22_hud]:hud_base
+        item_visual                 = anomaly_weapons\wpn_trejo22\wpn_trejo22_hud.ogf
+        attach_place_idx            = 0
+        zoom_hide_crosshair         = true
+        
+		item_position                    = 0, 0, 0
+		item_orientation			     = 0, 0, 0
+		
+        aim_hud_offset_pos               = -0.084372, 0.043296, -0.066492
+        aim_hud_offset_pos_16x9          = -0.084372, 0.043296, -0.066492
+
+        aim_hud_offset_rot               = 0.001069, 0.000644, 0
+        aim_hud_offset_rot_16x9          = 0.001069, 0.000644, 0
+
+        aim_hud_offset_alt_pos           = -0.145761, -0.049136, 0
+        aim_hud_offset_alt_pos_16x9      = -0.145761, -0.049136, 0
+        aim_hud_offset_alt_rot           = -0.00974, 0.031255, 0.47559
+        aim_hud_offset_alt_rot_16x9      = -0.00974, 0.031255, 0.47559
+		
+        hands_orientation                = 0, 0, 0
+        hands_orientation_16x9           = 0, 0, 0
+
+        hands_position                   = 0, 0, -0.025
+        hands_position_16x9              = 0, 0, -0.025
+		
+        lowered_hud_offset_pos           = 0.018453, 0.080862, -0.001494
+        lowered_hud_offset_pos_16x9      = 0.018453, 0.080862, -0.001494
+        lowered_hud_offset_rot           = 0.392822, -0.005602, -0.007683
+        lowered_hud_offset_rot_16x9      = 0.392822, -0.005602, -0.007683
+
+gl_hud_offset_pos           = 0, 0, 0
+gl_hud_offset_rot           = 0, 0, 0
+        
+lean_hud_offset_pos         = 0, 0, 0
+lean_hud_offset_rot         = 0, 0, 0
+        
+safemode_anm				= 
+safemode_anm2				= 
+        
+anm_hide                                 = hand_trejo22_holster, trejo22_idle
+anm_hide_empty                           = hand_trejo22_holster_nosaf, trejo22_empty
+anm_idle                                 = hand_trejo22_idle, trejo22_idle
+anm_idle_jammed                          = hand_trejo22_idle_nosaf, trejo22_jam
+anm_idle_aim                             = hand_trejo22_aim, trejo22_idle
+anm_idle_aim_empty                       = hand_trejo22_aim, trejo22_empty
+anm_idle_aim_moving                      = hand_trejo22_walk, trejo22_idle, 0.75
+anm_idle_aim_moving_crouch               = hand_trejo22_walk, trejo22_idle
+anm_idle_aim_moving_crouch_empty         = hand_trejo22_walk, trejo22_empty
+anm_idle_aim_moving_empty                = hand_trejo22_walk, trejo22_empty, 0.7
+anm_idle_empty                           = hand_trejo22_idle, trejo22_empty
+anm_idle_moving                          = hand_trejo22_walk, trejo22_idle
+anm_idle_moving_crouch                   = hand_trejo22_walk, trejo22_idle
+anm_idle_moving_crouch_empty             = hand_trejo22_walk, trejo22_empty
+anm_idle_moving_empty                    = hand_trejo22_walk, trejo22_empty
+anm_idle_sprint                          = hand_trejo22_sprint, trejo22_idle
+anm_idle_sprint_empty                    = hand_trejo22_sprint, trejo22_empty
+anm_reload                               = hand_trejo22_reload, trejo22_reload
+anm_reload_empty                         = hand_trejo22_reload_empty, trejo22_reload_empty
+anm_reload_misfire                       = hand_trejo22_unjam, trejo22_unjam
+anm_shot_l                               = hand_trejo22_shoot, trejo22_shoot_empty
+anm_shots                                = hand_trejo22_shoot, trejo22_shoot
+anm_show                                 = hand_trejo22_draw, trejo22_idle
+anm_show_empty                           = hand_trejo22_draw_nosaf, trejo22_empty
+anm_shots_aim                            = hand_trejo22_shoot_aim, trejo22_shoot
+anm_shots_aim_l                          = hand_trejo22_shoot_aim, trejo22_shoot_empty
+
+
+anm_hide_jammed                        = hand_trejo22_holster_nosaf, trejo22_jam         
+anm_idle_jammed                        = hand_trejo22_idle, trejo22_jam
+anm_idle_aim_jammed                    = hand_trejo22_aim, trejo22_jam
+anm_idle_aim_moving_jammed             = hand_trejo22_walk, trejo22_jam, 0.75
+anm_idle_aim_moving_crouch_jammed      = hand_trejo22_walk, trejo22_jam,  0.7
+anm_idle_moving_jammed                 = hand_trejo22_walk, trejo22_jam
+anm_idle_moving_crouch_jammed          = hand_trejo22_walk, trejo22_jam, 0.7
+anm_idle_sprint_jammed                 = hand_trejo22_sprint, trejo22_jam
+anm_show_jammed                        = hand_trejo22_draw_nosaf, trejo22_jam
+
+anm_bore                                 = hand_trejo22_inspect, trejo22_idle
+anm_bore_empty                           = hand_trejo22_inspect, trejo22_empty
+anm_bore_jammed                        = hand_trejo22_inspect, trejo22_jam
+
+;--- Переходы спринта---
+
+        anm_sprint_start             = hand_trejo22_holster_nosaf, trejo22_idle
+        anm_sprint_end               = hand_trejo22_draw_nosaf, trejo22_idle
+		anm_sprint_start_empty       = hand_trejo22_holster_nosaf, trejo22_empty
+        anm_sprint_end_empty         = hand_trejo22_draw_nosaf, trejo22_empty
+		anm_sprint_start_jammed      = hand_trejo22_holster_nosaf, trejo22_jam   
+        anm_sprint_end_jammed        = hand_trejo22_draw_nosaf, trejo22_jam
+		
+
+;--- Паттерны спринта---
+
+        ts_pattern_sprint_start      = .+, anm_idle_sprint, anm_sprint_start, 1
+        ts_pattern_sprint_end        = anm_idle_sprint, ^anm_idle.*, anm_sprint_end
+        ts_strict_sprint_end_move    = anm_sprint_start, anm_idle_moving, anm_sprint_end  
+        
+        shell_bone                  = wpn_body
+        shell_point                 = 200, 200, 200
+        
+        fire_bone                   = muzzle
+        fire_point                  = 0, 0, 0
+
+;------------------------------------------------------------------------------------------------
+[wpn_trejo22_stendokit]:wpn_trejo22
+	visual					     = dynamics\weapons\wpn_trejo22\wpn_trejo22_stendo_world.ogf
+	parent_section              = wpn_trejo22_stendokit
+        description                 = st_wpn_trejo22stendo_descr
+	inv_grid_x         = 2
+        hud                         = wpn_trejo22_stendo_hud
+        ammo_elapsed                = 32
+        ammo_mag_size               = 32
+
+;------------------------------------------------------------------------------------------------
+[wpn_trejo22_stendo_hud]:wpn_trejo22_hud
+        item_visual                 = anomaly_weapons\wpn_trejo22\wpn_trejo22_stendo_hud.ogf
+
+        fire_bone                   = muzzle
+
+anm_reload                               = hand_trejo22_reload_stendo, trejo22_reload_stendo
+anm_reload_empty                         = hand_trejo22_reload_stendo_empty, trejo22_reload_stendo_empty
+

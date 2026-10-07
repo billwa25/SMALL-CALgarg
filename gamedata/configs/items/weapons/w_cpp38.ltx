@@ -1,0 +1,345 @@
+;------------------------------------------------------------------------------------------------
+[wpn_cpp38]:identity_immunities,weapon_probability,default_weapon_params,wpn_desert_eagle_sounds
+GroupControlSection                      = spawn_group
+discovery_dependency                     =
+$npc                                     = on
+$prefetch                                = 8
+$spawn                                   = "weapons\cpp38"
+scheduled                                = off
+cform                                    = skeleton
+parent_section              			 = wpn_cpp38
+
+class                                    = WP_PM
+slot                                     = 1
+animation_slot                           = 1
+ef_weapon_type                           = 5
+hand_dependence                          = 1
+single_handed                            = 1
+
+default_to_ruck                          = false
+sprint_allowed                           = true
+
+icons_texture               = ui\ui_cpp38
+inv_grid_width     = 2
+inv_grid_height    = 1
+inv_grid_x         = 0
+inv_grid_y         = 0
+
+inv_name                                 = st_wpn_cpp38
+inv_name_short                           = st_wpn_cpp38
+description                              = st_wpn_cpp38_descr
+
+kind                                     = w_pistol
+inv_weight                               = 0.65
+cost                                     = 3100
+repair_type                              = pistol
+
+hud                                      = wpn_cpp38_hud
+visual                  		 = dynamics\weapons\wpn_cpp38\wpn_cpp38_world.ogf
+position                         = -0.052136, -0.113731, 0.048921
+orientation                      = 0, -4.018629, 9.55220
+fire_point                       = 0, 0.172104, 0.145119
+ph_mass                                  = 1
+
+flame_particles                          = weapons\generic_weapon03
+smoke_particles                          = weapons\generic_shoot_00
+
+
+light_color                              = 0.6, 0.5, 0.3
+light_range                              = 2.0
+light_time                               = 0.2
+light_var_color                          = 0.05
+light_var_range                          = 0.5
+
+upgrades                                 = up_gr_firstab_mp412, up_gr_seconab_mp412, up_gr_thirdab_cpp38
+upgr_icon_path                           = ui\ui_cpp38
+installed_upgrades                       =
+upgrade_scheme                           = upgrade_scheme_cpp38
+upgr_icon_x                              = 50
+upgr_icon_y                              = 100
+upgr_icon_width                          = 200
+upgr_icon_height                         = 150
+
+fire_modes                               = 1
+ammo_class                               = ammo_38spl_fmj
+ammo_current                             = 90
+ammo_elapsed                             = 12
+ammo_limit                               = 120
+ammo_mag_size                            = 6
+
+scopes 			                         = none
+scope_status                             = 0
+scope_zoom_factor                        = 0
+
+        silencer_name               = wpn_sil_22lr_bottle
+        silencer_status             = 2
+        silencer_x                  = 70
+        silencer_y                  = -20
+silencer_light_color                     = 0.6, 0.5, 0.3
+silencer_light_range                     = 0.01
+silencer_light_time                      = 0.2
+silencer_light_var_color                 = 0.05
+silencer_light_var_range                 = 0.5
+silencer_smoke_particles                 = weapons\generic_shoot_00
+
+grenade_launcher_status                  = 0
+
+hit_impulse                              = 25
+hit_power                                = 0.47, 0.47, 0.47, 0.47
+hit_type                                 = fire_wound
+fire_distance                            = 200
+bullet_speed                             = 390
+rpm                                      = 240
+rpm_empty_click                          = 200
+
+use_aim_bullet                           = true
+time_to_aim                              = 0.0 ;  1.0             
+zoom_dof                                 = -1000, 1.0, 1000
+zoom_enabled                             = true
+zoom_rotate_time                         = 0.25
+reload_dof                               = 0.0, 0.5, 5, 1.7
+control_inertion_factor                  = 1.0f
+crosshair_inertion                       = 4.3
+fire_dispersion_base                     = 0.54
+fire_dispersion_condition_factor         = 0.001
+
+misfire_start_condition                  = 0.6           
+misfire_start_prob                       = 0.006
+misfire_end_condition                    = 0.12
+misfire_end_prob                         = 0.10
+
+condition_queue_shot_dec                 = 0.0015
+condition_shot_dec                       = 0.0015
+
+cam_return                               = 0
+cam_relax_speed                          = 6
+cam_dispersion                           = 3
+cam_dispersion_frac                      = 1
+cam_dispersion_inc                       = 0.2
+cam_max_angle                            = 45.0
+cam_max_angle_horz                       = 50
+cam_step_angle_horz                      = 10
+zoom_cam_relax_speed                     = 6
+zoom_cam_dispersion                      = 1.8
+zoom_cam_dispersion_frac                 = 0.8
+zoom_cam_dispersion_inc                  = 0.2
+zoom_cam_max_angle                       = 60.0
+zoom_cam_step_angle_horz                 = 10
+zoom_cam_max_angle_horz			 = 30
+
+PDM_disp_accel_factor                    = 1.055
+PDM_disp_base                            = 0.7
+PDM_disp_crouch                          = 1.0
+PDM_disp_crouch_no_acc                   = 1.0
+PDM_disp_vel_factor                      = 1.05
+
+cam_relax_speed_ai                       = 120.75
+holder_fov_modifier                      = 1.0
+holder_range_modifier                    = 1.0
+min_radius                               = 0
+max_radius                               = 500
+hit_probability_gd_novice                = 1.00
+hit_probability_gd_stalker               = 1.00
+hit_probability_gd_veteran               = 1.00
+hit_probability_gd_master                = 1.00
+
+kill_msg_x                               = 194
+kill_msg_y                               = 123
+kill_msg_width                           = 46
+kill_msg_height                          = 27
+weapon_lower_speed                       = 0.2
+
+use_alt_aim_hud                   		 = true
+
+snd_reload									= weapons\cpp38\cpp38_reload
+snd_reload_empty									= weapons\cpp38\cpp38_reload
+snd_reload_misfire									= weapons\cpp38\cpp38_unjam
+
+snd_shoot						 					= weapons\cpp38\38spl_shoot
+snd_shoot_actor										= weapons\cpp38\38spl_shoot
+
+
+
+
+;====================================================================== HUD ===========================================================================;
+[wpn_cpp38_hud]:hud_base
+
+item_visual                              = anomaly_weapons\wpn_cpp38\wpn_cpp38_hud.ogf
+attach_place_idx                         = 0
+zoom_hide_crosshair                      = true
+
+        item_orientation                 = 0, 0, 0
+        item_position                    = 0, 0, 0
+
+	hands_orientation                        = 0, 0, 0
+	hands_orientation_16x9                   = 0, 0, 0
+
+        hands_position                   = 0.025754, -0.007962, -0.035943
+        hands_position_16x9              = 0.025754, -0.007962, -0.035943
+
+        aim_hud_offset_alt_pos           = -0.181865, -0.034296, -0.046772
+        aim_hud_offset_alt_pos_16x9      = -0.181865, -0.034296, -0.046772
+
+        aim_hud_offset_alt_rot           = 0.00413, 0.103524, 0.304193
+        aim_hud_offset_alt_rot_16x9      = 0.00413, 0.103524, 0.304193
+
+        aim_hud_offset_pos               = -0.113068, 0.041809, -0.117542
+        aim_hud_offset_pos_16x9          = -0.113068, 0.041809, -0.117542
+
+        aim_hud_offset_rot               = 0.022709, -0.005602, 0.018339
+        aim_hud_offset_rot_16x9          = 0.022709, -0.005602, 0.018339
+
+
+        lowered_hud_offset_pos           = -0.015165, -0.312184, -0.01048
+        lowered_hud_offset_pos_16x9      = -0.015165, -0.312184, -0.01048
+
+        lowered_hud_offset_rot           = -1.00739, 0.121567, -0.014215
+        lowered_hud_offset_rot_16x9      = -1.00739, 0.121567, -0.014215
+
+lean_hud_offset_pos                      = 0, 0, 0
+lean_hud_offset_rot                      = 0, 0, 0
+
+        
+        anm_show                                 = hand_cpp38_draw, cpp38_idle
+        anm_hide                                 = hand_cpp38_holster, cpp38_idle
+
+        anm_idle                                 = hand_cpp38_idle, cpp38_idle
+	anm_idle_aim                     	 = hand_cpp38_aim, cpp38_idle
+        anm_idle_aim_moving                      = hand_cpp38_walk, cpp38_idle, 0.75
+        anm_idle_aim_moving_crouch               = hand_cpp38_aim, cpp38_idle, 0.7
+        anm_idle_moving                          = hand_cpp38_walk, cpp38_idle
+        anm_idle_moving_crouch                   = hand_cpp38_walk, cpp38_idle, 0.7
+        anm_idle_sprint                          = hand_cpp38_running, cpp38_idle, 1.3
+
+        anm_reload                               = hand_cpp38_reload, cpp38_reload
+        anm_reload_misfire          		     = hand_cpp38_unjam, cpp38_unjam
+
+        anm_shots                                = hand_cpp38_shoot, cpp38_shoot
+        anm_shots_aim                                = hand_cpp38_shoot_aim, cpp38_shoot
+
+	anm_bore                                 = hand_cpp38_inspect, cpp38_idle
+
+        ; Jammed Animation Variants
+        anm_idle_jammed                    = hand_cpp38_idle, cpp38_idle_jam
+        anm_show_jammed                    = hand_cpp38_draw, cpp38_idle_jam
+        anm_hide_jammed                    = hand_cpp38_holster, cpp38_idle_jam
+        anm_idle_aim_jammed                = hand_cpp38_aim, cpp38_idle_jam
+        anm_idle_sprint_jammed             = hand_cpp38_running, cpp38_idle_jam
+        anm_idle_moving_jammed             = hand_cpp38_walk, cpp38_idle_jam
+        anm_idle_moving_crouch_jammed      = hand_cpp38_walk, cpp38_idle_jam
+	anm_bore_jammed                    = hand_cpp38_inspect, cpp38_idle_jam
+	
+	anm_sprint_start             = hand_cpp38_walk2run, cpp38_idle
+        anm_sprint_end               = hand_cpp38_run2walk, cpp38_idle
+	anm_sprint_start_jammed      = hand_cpp38_walk2run, cpp38_idle_jam   
+	anm_sprint_end_jammed        = hand_cpp38_run2walk, cpp38_idle_jam
+        
+  
+
+fire_bone                                = muzzle
+fire_point                       = 0.008214, 0.014527, 0
+
+freelook_z_offset_mul                    = 0.1
+
+
+
+;====================================================================== 6 inch ===========================================================================;
+[wpn_cpp38_6in]:wpn_cpp38
+
+parent_section              			 = wpn_cpp38_6in
+
+inv_grid_width     = 3
+inv_grid_height    = 1
+inv_grid_x         = 4
+inv_grid_y         = 0
+
+upgr_icon_x                              = 50
+upgr_icon_y                              = 250
+upgr_icon_width                          = 250
+upgr_icon_height                         = 150
+
+description                              = st_wpn_cpp38_6in_descr
+
+inv_weight                               = 0.7
+cost                                     = 5400
+
+hud                                      = wpn_cpp38_6in_hud
+visual                  		 = dynamics\weapons\wpn_cpp38\wpn_cpp38_6in_world.ogf
+position                         = -0.052136, -0.113731, 0.048921
+orientation                      = 0, -4.018629, 9.55220
+fire_point                       = 0, 0.172104, 0.145119
+ph_mass                                  = 1
+
+hit_impulse                              = 30
+hit_power                                = 0.52, 0.52, 0.52, 0.52
+hit_type                                 = fire_wound
+fire_distance                            = 300
+bullet_speed                             = 420
+;====================================================================== HUD ===========================================================================;
+
+[wpn_cpp38_6in_hud]:wpn_cpp38_hud
+item_visual                              = anomaly_weapons\wpn_cpp38\wpn_cpp38_6in_hud.ogf
+
+        anm_show                                 = hand_cpp38_draw, cpp38_idle, 0.8
+
+        anm_show_jammed                    = hand_cpp38_draw, cpp38_idle_jam, 0.8
+
+
+        aim_hud_offset_pos               = -0.113855, 0.041523, -0.117542
+        aim_hud_offset_pos_16x9          = -0.113855, 0.041523, -0.117542
+        aim_hud_offset_rot               = 0.016138, -0.001226, 0
+        aim_hud_offset_rot_16x9          = 0.016138, -0.001226, 0
+
+;====================================================================== Detective ===========================================================================;
+[wpn_cpp38_det]:wpn_cpp38
+
+parent_section              			 = wpn_cpp38_det
+
+inv_grid_width     = 2
+inv_grid_height    = 1
+inv_grid_x         = 2
+inv_grid_y         = 0
+
+silencer_status             = 0
+
+upgr_icon_x                              = 250
+upgr_icon_y                              = 100
+upgr_icon_width                          = 150
+upgr_icon_height                         = 150
+
+inv_name                                 = st_wpn_cpp38_det
+inv_name_short                           = st_wpn_cpp38_det
+description                              = st_wpn_cpp38_det_descr
+
+inv_weight                               = 0.6
+cost                                     = 3200
+
+rpm                                      = 255
+
+hud                                      = wpn_cpp38_det_hud
+visual                  		 = dynamics\weapons\wpn_cpp38\wpn_cpp38_det_world.ogf
+position                         = -0.052136, -0.113731, 0.048921
+orientation                      = 0, -4.018629, 9.55220
+fire_point                       = 0, 0.172104, 0.087732
+ph_mass                                  = 1
+
+hit_power                                = 0.4, 0.4, 0.4, 0.4
+fire_distance                            = 200
+bullet_speed                             = 350
+
+;====================================================================== HUD ===========================================================================;
+[wpn_cpp38_det_hud]:wpn_cpp38_hud
+item_visual                              = anomaly_weapons\wpn_cpp38\wpn_cpp38_det_hud.ogf
+
+
+        aim_hud_offset_pos               = -0.113951, 0.046002, -0.117542
+        aim_hud_offset_pos_16x9          = -0.113951, 0.046002, -0.117542
+        aim_hud_offset_rot               = 0.027445, -0.001223, 0
+        aim_hud_offset_rot_16x9          = 0.027445, -0.001223, 0
+
+        anm_show                                 = hand_cpp38_draw, cpp38_idle, 2
+        anm_hide                                 = hand_cpp38_holster, cpp38_idle, 1.5
+
+        anm_show_jammed                    = hand_cpp38_draw, cpp38_idle_jam, 2
+        anm_hide_jammed                    = hand_cpp38_holster, cpp38_idle_jam, 1.5
+

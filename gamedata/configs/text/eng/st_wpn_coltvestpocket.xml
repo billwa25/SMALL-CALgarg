@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+<string id="st_wpn_cvp1908">
+		<text>Colt Model 1908 Vest Pocket</text>
+	</string>
+	<string id="st_wpn_cvp1908_descr">
+		<text>The Colt Model 1908 Vest Pocket is a small, hammerless semi-automatic pistol produced by Colt’s Manufacturing Company from 1908 to 1948. Chambered in .25 ACP, this pocket-sized pistol was designed for discreet concealed carry, often fitting easily into a vest pocket, as its name suggests. Designed by John Browning, the Model 1908 features a simple blowback action and a six-round magazine. Its compact size, combined with reliable performance and quality Colt craftsmanship, made it a popular choice for personal defense during the early 20th century. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Colt's Manufacturing Company\n
+		</text>
+	</string>
+	<string id="st_wpn_cvp1908stendo_descr">
+		<text>The Colt Model 1908 Vest Pocket is a small, hammerless semi-automatic pistol produced by Colt’s Manufacturing Company from 1908 to 1948. Chambered in .25 ACP, this pocket-sized pistol was designed for discreet concealed carry, often fitting easily into a vest pocket, as its name suggests. Designed by John Browning, the Model 1908 features a simple blowback action and a six-round magazine. Its compact size, combined with reliable performance and quality Colt craftsmanship, made it a popular choice for personal defense during the early 20th century. \n \n
+		This weapon has been fitted with a 32 round magazine.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Colt's Manufacturing Company\n
+		</text>
+	</string>	
+
+</string_table>

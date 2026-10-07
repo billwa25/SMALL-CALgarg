@@ -1,0 +1,15 @@
+<template name="upgrade_scheme_cpp38">
+    <column>
+        <cell x="0" y="24" point_x="215" point_y="210"/>
+        <cell x="0" y="126" point_x="40" point_y="195"/>
+		<cell x="0" y="228" point_x="110" point_y="180"/>
+    </column>
+    <column>
+        <cell x="80" y="0" point_x="245" point_y="220"/>
+        <cell x="80" y="49" point_x="245" point_y="220"/>
+    </column>
+    <column>
+        <cell x="160" y="0" point_x="85" point_y="165"/>
+        <cell x="160" y="49" point_x="300" point_y="230"/>
+    </column>
+</template>

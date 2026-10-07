@@ -1,0 +1,69 @@
+;------------------------------------------------------------------------------------------------
+[wpn_pt22]:identity_immunities,weapon_probability,default_weapon_params,wpn_pt25
+        $spawn                      = "weapons\pt22"
+	parent_section              = wpn_pt22
+inv_grid_x         = 4
+
+        inv_name                    = st_wpn_pt22
+        inv_name_short              = st_wpn_pt22
+        description                 = st_wpn_pt22_descr
+        inv_weight                  = 0.35
+        cost                        = 3200
+        ammo_elapsed                = 8
+        ammo_mag_size               = 8
+        
+        hud                         = wpn_pt22_hud
+        visual                      = dynamics\weapons\wpn_pt22\wpn_pt22.ogf
+        upgr_icon_x                 = 200
+        ammo_class                  = ammo_22lr_fmj
+        condition_queue_shot_dec    = 0.0008
+        condition_shot_dec          = 0.0008
+        ammo_elapsed                = 8
+        ammo_mag_size               = 8
+        silencer_name               = wpn_sil_22lr
+	silencer_x                  = 72
+	silencer_y                  = -19
+        hit_impulse                 = 7
+        hit_power                   = 0.25, 0.25, 0.25, 0.25
+        fire_distance               = 150
+        bullet_speed                = 370
+        rpm                         = 530
+        fire_dispersion_base        = 0.5
+        cam_return                               = 0
+	cam_relax_speed                          = 5
+	cam_dispersion                           = 2
+	cam_dispersion_frac                      = 1
+	cam_dispersion_inc                       = 0.15
+	cam_max_angle                            = 40
+	cam_max_angle_horz                       = 50
+	cam_step_angle_horz                      = 8
+	zoom_cam_relax_speed                     = 6
+	zoom_cam_dispersion                      = 1.2
+	zoom_cam_dispersion_frac                 = 0.9
+	zoom_cam_dispersion_inc                  = 0.2
+	zoom_cam_max_angle                       = 60.0
+	zoom_cam_step_angle_horz                 = 7
+	zoom_cam_max_angle_horz                  = 60.0
+        PDM_disp_base               = 0.5
+;---------------------------------------------------------------------SND-------------------------------------------------------------------------------
+snd_shoot_actor  			= weapons\taurus_pts\22lr_pistol_shoot
+snd_shoot  			= weapons\taurus_pts\22lr_pistol_shoot
+
+;--------------------------------------------------------------------HUD--------------------------------------------------------------------------------
+[wpn_pt22_hud]:hud_base, wpn_pt25_hud
+
+item_visual                 = anomaly_weapons\wpn_pt22\wpn_pt22_hud.ogf
+
+;------------------------------------------------------------------------------------------------
+[wpn_pt22_stendokit]:wpn_pt22
+	parent_section              = wpn_pt22_stendokit
+	inv_grid_x         = 6
+        hud                         = wpn_pt22_stendo_hud
+        description                 = st_wpn_pt22stendo_descr
+        ammo_elapsed                = 20
+        ammo_mag_size               = 20
+        visual                      = dynamics\weapons\wpn_pt22\wpn_pt22_stendo_world.ogf	
+
+;------------------------------------------------------------------------------------------------
+[wpn_pt22_stendo_hud]:wpn_pt25_stendo_hud
+        item_visual                 = anomaly_weapons\wpn_pt22\wpn_pt22_stendo_hud.ogf

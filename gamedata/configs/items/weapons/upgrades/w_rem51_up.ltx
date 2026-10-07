@@ -1,0 +1,113 @@
+[up_sect_firste_rem51]
+cost                                     = 4680
+
+fire_modes                               = 1, -1
+rpm                                      = +200
+cam_dispersion                           = +0.08
+cam_dispersion_inc                       = 0.0 ;+0.0
+cam_step_angle_horz                      = +0.044 
+inv_weight                               = +0.09
+
+[up_sect_fourta_rem51]
+cost                                     = 2460
+value                                    = +10
+fire_dispersion_base                     = -0.06
+
+inv_weight                               = +0.1
+
+
+[up_sect_fiftha_rem51]
+cost                                     = 1890 
+
+value                                    = "32acp"
+ammo_class                               = ammo_32acp_fmj
+condition_queue_shot_dec                 = +0.00012 
+condition_shot_dec                       = +0.00012 
+misfire_start_prob                       = 0.0008
+misfire_end_prob                         = 0.008 
+ammo_elapsed                = +1
+ammo_mag_size               = +1
+
+inv_weight                               = +0.06
+
+
+;----------------------------------------------------------------------------------------------------------------------
+
+[up_firsta_rem51]:up_firsta_colt1911
+effects                                  = up_gr_firstcd_rem51
+
+[up_firstc_rem51]:up_firstc_colt1911
+effects                                  = up_gr_firstef_rem51
+
+[up_firstd_rem51]:up_firstd_colt1911
+effects                                  = up_gr_firstef_rem51
+
+[up_firste_rem51]
+scheme_index                             = 2, 0
+known                                    = 1
+effects                                  =
+section                                  = up_sect_firste_rem51
+property                                 = prop_autofire
+precondition_functor                     = inventory_upgrades.precondition_functor_a
+precondition_parameter                   = a & b
+effect_functor                           = inventory_upgrades.effect_functor_a
+effect_parameter                         = something_here
+
+prereq_functor                           = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor                   = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params                            =
+name                                     = st_up_zatp_c6_name
+description                              = st_up_zatp_c6_descr
+icon                                     = ui_inGame2_upgrade_Marta_4
+
+[up_fourta_rem51]
+scheme_index                             = 0, 3
+known                                    = 1
+effects                                  = 
+section                                  = up_sect_fourta_rem51
+property                                 = prop_dispersion
+precondition_functor                     = inventory_upgrades.precondition_functor_a
+precondition_parameter                   = a & b
+effect_functor                           = inventory_upgrades.effect_functor_a
+effect_parameter                         = something_here
+prereq_functor                           = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor                   = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params                            =
+name                                     = st_up_usmp_a1_name
+description                              = st_up_usmp_a1_descr
+icon                                     = ui_inGame2_upgrade_Kora_919_12
+
+[up_fiftha_rem51]
+scheme_index                             = 0, 4
+known                                    = 1
+effects                                  =
+section                                  = up_sect_fiftha_rem51
+property                                 = prop_calibre
+
+precondition_functor                     = inventory_upgrades.precondition_functor_a
+precondition_parameter                   = a & b
+effect_functor                           = inventory_upgrades.effect_functor_a
+effect_parameter                         = something_here
+
+prereq_functor                           = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor                   = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params                            =
+name                                     = st_up_add_32acpconv_magsize_name
+description                              = st_up_add_32acpconv_magsize_descr
+icon                                     = ui_inGame2_upgrade_PMm_13
+
+;----------------------------------------------------------------------------------------------------------------------
+[up_gr_firstab_rem51]
+elements                                 = up_firsta_rem51
+
+[up_gr_firstcd_rem51]
+elements                                 = up_firstc_rem51, up_firstd_rem51
+
+[up_gr_firstef_rem51]
+elements                                 = up_firste_rem51
+
+[up_gr_fourtab_rem51]
+elements                                 = up_fourta_rem51
+
+[up_gr_fifthab_rem51]
+elements                                 = up_fiftha_rem51

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+<string id="st_wpn_9galo22">
+		<text>9 Galo</text>
+	</string>
+	<string id="st_wpn_9galo22_descr">
+		<text>The Munibras 950 is a budget-friendly, double-action revolver produced in Brazil during the 1980s. Chambered in .22 Long Rifle with an unusual 9-shot capacity, it was marketed as an affordable option for self-defense and recreational shooting. Its design drew clear inspiration from low-cost international revolvers of the era, offering basic functionality but with questionable manufacturing quality and durability. Known for its rough finish, inconsistent trigger pull, and limited longevity, revolvers like these became a common sight in the underworld for those seeking a low-price firearm, often with none to modest expectations regarding performance and reliability. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Brazil\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]MUNIBRAS S.A.\n
+		</text>
+	</string>	
+</string_table>

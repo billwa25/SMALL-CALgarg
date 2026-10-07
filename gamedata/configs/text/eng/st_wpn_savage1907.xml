@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+<string id="st_wpn_sav1907">
+		<text>Savage Model 1907</text>
+	</string>
+	<string id="st_wpn_sav1907_descr">
+		<text>The Savage Model 1907 is a semi-automatic pistol manufactured by the Savage Arms Company from 1907 to 1920. Chambered primarily in .32 ACP, with later versions also available in .380 ACP, the Model 1907 is notable for its distinctive appearance, double-stack magazine, and marketing slogan: "Ten Shots Quick!" Its design, created by Elbert Searle, featured a striker-fired mechanism and a unique delayed blowback action. Popular among civilians and law enforcement of the era, the Savage 1907 was also a contender in early U.S. military pistol trials, making it a significant piece of American firearms history. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Savage Arms Company\n
+		</text>
+	</string>
+	<string id="st_wpn_sav1907stendo_descr">
+		<text>The Savage Model 1907 is a semi-automatic pistol manufactured by the Savage Arms Company from 1907 to 1920. Chambered primarily in .32 ACP, with later versions also available in .380 ACP, the Model 1907 is notable for its distinctive appearance, double-stack magazine, and marketing slogan: "Ten Shots Quick!" Its design, created by Elbert Searle, featured a striker-fired mechanism and a unique delayed blowback action. Popular among civilians and law enforcement of the era, the Savage 1907 was also a contender in early U.S. military pistol trials, making it a significant piece of American firearms history. \n \n
+		This weapon has been fitted with a 20 round magazine.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Savage Arms Company\n
+		</text>
+	</string>	
+
+</string_table>

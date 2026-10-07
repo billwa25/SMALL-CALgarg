@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+<string id="st_wpn_trejo22">
+		<text>Trejo Modelo 1</text>
+	</string>
+	<string id="st_wpn_trejo22_descr">
+		<text>The Trejo Modelo 1 is a compact, select-fire pistol produced in Mexico by Armas Trejo from 1948 to the early 1970s. Chambered in .22 LR, it is known for its small size, all-steel construction, and distinctive 1911-style design. This version, the "Tipo Rafaga," features full-auto capability with an exceptionally high rate of fire around 1,300 rounds per minute, making it one of the smallest machine pistols ever produced. Due to changes in Mexican firearms law, production ceased in the early 1970s, and the Modelo 1 remains a rare and collectible firearm today. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Mexico\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Armas Trejo S.A.\n
+		</text>
+	</string>
+<string id="st_wpn_trejo22stendo_descr">
+		<text>The Trejo Modelo 1 is a compact, select-fire pistol produced in Mexico by Armas Trejo from 1948 to the early 1970s. Chambered in .22 LR, it is known for its small size, all-steel construction, and distinctive 1911-style design. This version, the "Tipo Rafaga," features full-auto capability with an exceptionally high rate of fire around 1,300 rounds per minute, making it one of the smallest machine pistols ever produced. Due to changes in Mexican firearms law, production ceased in the early 1970s, and the Modelo 1 remains a rare and collectible firearm today.\n \n
+		This weapon has been fitted with a 32 round magazine.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Mexico\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Armas Trejo S.A.\n
+		</text>
+	</string>	
+</string_table>

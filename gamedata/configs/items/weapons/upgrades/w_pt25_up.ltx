@@ -1,0 +1,55 @@
+[up_sect_firste_pt25]
+cost                                     = 4680
+
+fire_modes                               = 1, -1
+rpm                                      = +100
+cam_dispersion                           = +0.08
+cam_dispersion_inc                       = 0.0 ;+0.0
+cam_step_angle_horz                      = +0.044 
+inv_weight                               = +0.09
+
+;----------------------------------------------------------------------------------------------------------------------
+
+[up_firsta_pt25]:up_firsta_pm
+effects                                  = up_gr_firstcd_pt25
+
+[up_firstc_pt25]:up_firstc_pm
+effects                                  = up_gr_firstef_pt25
+
+[up_firstd_pt25]:up_firstd_pm
+effects                                  = up_gr_firstef_pt25
+
+[up_firste_pt25]
+scheme_index                             = 2, 0
+known                                    = 1
+effects                                  =
+section                                  = up_sect_firste_pt25
+property                                 = prop_autofire
+precondition_functor                     = inventory_upgrades.precondition_functor_a
+precondition_parameter                   = a & b
+effect_functor                           = inventory_upgrades.effect_functor_a
+effect_parameter                         = something_here
+
+prereq_functor                           = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor                   = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params                            =
+name                                     = st_up_zatp_c6_name
+description                              = st_up_zatp_c6_descr
+icon                                     = ui_inGame2_upgrade_Marta_4
+
+[up_fiftha_pt25]:up_fiftha_pm
+effects                                  = 
+
+;----------------------------------------------------------------------------------------------------------------------
+[up_gr_firstab_pt25]
+elements                                 = up_firsta_pt25
+
+[up_gr_firstcd_pt25]
+elements                                 = up_firstc_pt25, up_firstd_pt25
+
+[up_gr_firstef_pt25]
+elements                                 = up_firste_pt25
+
+[up_gr_fifthab_pt25]
+elements                                 = up_fiftha_pt25
+

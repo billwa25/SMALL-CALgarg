@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	
+
+	<string id="st_wpn_cpp38">
+		<text>Colt Police Positive Special</text>
+	</string>
+	<string id="st_wpn_cpp38_descr">
+		<text>The Colt Police Positive Special is a double-action revolver produced by Colt's Manufacturing Company from 1907 to 1995. Chambered in .38 Special, it was an evolution of the earlier Police Positive model, featuring a slightly longer cylinder and reinforced frame to handle the more powerful cartridge. Designed primarily for law enforcement use, the revolver became widely adopted by police departments across the United States. Known for its solid construction, smooth action, and reliability, the Police Positive Special remains a classic example of early 20th-century American service revolvers.
+		\n \nThis model has the standard 4 inch barrel.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Colt's Manufacturing Company\n
+		</text>
+	</string>	
+	<string id="st_wpn_cpp38_6in_descr">
+		<text>The Colt Police Positive Special is a double-action revolver produced by Colt's Manufacturing Company from 1907 to 1995. Chambered in .38 Special, it was an evolution of the earlier Police Positive model, featuring a slightly longer cylinder and reinforced frame to handle the more powerful cartridge. Designed primarily for law enforcement use, the revolver became widely adopted by police departments across the United States. Known for its solid construction, smooth action, and reliability, the Police Positive Special remains a classic example of early 20th-century American service revolvers.
+		\n \nThis model has the extended 6 inch barrel.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Colt's Manufacturing Company\n
+		</text>
+	</string>	
+	<string id="st_wpn_cpp38_det">
+		<text>Colt Detective Special</text>
+	</string>
+	<string id="st_wpn_cpp38_det_descr">
+		<text>The Colt Detective Special is a compact, double-action revolver introduced by Colt's Manufacturing Company in 1927. Chambered in .38 Special, it was designed specifically for concealed carry and plainclothes law enforcement use. Featuring a short 2-inch barrel and a six-shot cylinder, the Detective Special offered a balance of firepower and portability uncommon for its size at the time. Its robust construction, smooth trigger, and effective caliber made it a popular choice among detectives and private citizens for decades, solidifying its reputation as a classic snub-nose revolver. \n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]United States\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Colt's Manufacturing Company\n
+		</text>
+	</string>	
+</string_table>
