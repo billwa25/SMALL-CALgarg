@@ -144,7 +144,8 @@ snd_holster				                                          = weapons\trejo22\trejo
 snd_reload				                                          = weapons\trejo22\trejo22_reload
 snd_reload_empty			                                      	= weapons\trejo22\trejo22_reload_empty
 snd_reload_misfire                                                		= weapons\trejo22\trejo22_unjam
-snd_shoot_actor  								= weapons\trejo22\22lr_pistol_shoot
+snd_shoot                   = smallcal_trejo22_snd_shoot
+snd_shoot_actor             = smallcal_trejo22_snd_shoot_actor
 
 
         cam_relax_speed_ai          = 360
@@ -286,3 +287,25 @@ anm_bore_jammed                        = hand_trejo22_inspect, trejo22_jam
 anm_reload                               = hand_trejo22_reload_stendo, trejo22_reload_stendo
 anm_reload_empty                         = hand_trejo22_reload_stendo_empty, trejo22_reload_stendo_empty
 
+
+; layered gunshots (tools/build_sounds.py)
+[smallcal_trejo22_snd_shoot]
+snd_1_layer = weapons\trejo22\trejo22_shot_close_1
+snd_1_layer1 = weapons\trejo22\trejo22_shot_close_2
+snd_1_layer2 = weapons\trejo22\trejo22_shot_close_3
+snd_2_layer = weapons\trejo22\trejo22_shot_mech_1
+snd_2_layer1 = weapons\trejo22\trejo22_shot_mech_2
+snd_3_layer = weapons\trejo22\trejo22_shot_tail_1
+snd_3_layer1 = weapons\trejo22\trejo22_shot_tail_2
+snd_3_layer2 = weapons\trejo22\trejo22_shot_tail_3
+snd_4_layer = weapons\trejo22\trejo22_shot_far_1
+snd_4_layer1 = weapons\trejo22\trejo22_shot_far_2
+
+[smallcal_trejo22_snd_shoot_actor]
+snd_1_layer = weapons\trejo22\trejo22_shot_1p_1
+snd_1_layer1 = weapons\trejo22\trejo22_shot_1p_2
+snd_1_layer2 = weapons\trejo22\trejo22_shot_1p_3
+snd_2_layer = weapons\trejo22\trejo22_shot_mech_1
+snd_2_layer1 = weapons\trejo22\trejo22_shot_mech_2
+snd_3_layer = weapons\trejo22\trejo22_shot_1p_tail_1
+snd_3_layer1 = weapons\trejo22\trejo22_shot_1p_tail_2

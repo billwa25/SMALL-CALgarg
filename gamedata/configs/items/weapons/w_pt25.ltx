@@ -155,8 +155,8 @@ shell_dir		 		= 0,0,0.4
 snd_draw				= weapons\taurus_pts\pt25_draw
 snd_holster				= weapons\taurus_pts\pt25_holster
 
-snd_shoot				= weapons\taurus_pts\25acp_shoot
-snd_shoot_actor				= weapons\taurus_pts\25acp_shoot
+snd_shoot				= smallcal_pt25_snd_shoot
+snd_shoot_actor				= smallcal_pt25_snd_shoot_actor
 
 snd_reload				= weapons\taurus_pts\pt25_reload
 snd_reload_empty			= weapons\taurus_pts\pt25_reload_empty
@@ -292,3 +292,25 @@ anm_reload                               = hand_pt25_reload_stendo, pt25_reload
 anm_reload_empty                         = hand_pt25_reload_stendo_empty, pt25_reload_empty 
 
 
+
+; layered gunshots (tools/build_sounds.py)
+[smallcal_pt25_snd_shoot]
+snd_1_layer = weapons\taurus_pts\pt25_shot_close_1
+snd_1_layer1 = weapons\taurus_pts\pt25_shot_close_2
+snd_1_layer2 = weapons\taurus_pts\pt25_shot_close_3
+snd_2_layer = weapons\taurus_pts\pt25_shot_mech_1
+snd_2_layer1 = weapons\taurus_pts\pt25_shot_mech_2
+snd_3_layer = weapons\taurus_pts\pt25_shot_tail_1
+snd_3_layer1 = weapons\taurus_pts\pt25_shot_tail_2
+snd_3_layer2 = weapons\taurus_pts\pt25_shot_tail_3
+snd_4_layer = weapons\taurus_pts\pt25_shot_far_1
+snd_4_layer1 = weapons\taurus_pts\pt25_shot_far_2
+
+[smallcal_pt25_snd_shoot_actor]
+snd_1_layer = weapons\taurus_pts\pt25_shot_1p_1
+snd_1_layer1 = weapons\taurus_pts\pt25_shot_1p_2
+snd_1_layer2 = weapons\taurus_pts\pt25_shot_1p_3
+snd_2_layer = weapons\taurus_pts\pt25_shot_mech_1
+snd_2_layer1 = weapons\taurus_pts\pt25_shot_mech_2
+snd_3_layer = weapons\taurus_pts\pt25_shot_1p_tail_1
+snd_3_layer1 = weapons\taurus_pts\pt25_shot_1p_tail_2

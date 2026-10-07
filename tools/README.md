@@ -10,3 +10,8 @@ Python 3 + numpy + Pillow, no Blender needed. Run from the repository root.
 - `fix_pops.py [--dry DIR]`: eases single-frame arm jumps in the hands clips.
 
 The hud weapon is attached to the hands' `lead_gun` bone; the item clips' own root key is ignored by the engine.
+
+## Sounds
+
+- `oggx.py`: Ogg Vorbis page tools: read and write the X-Ray sound header (min and max distance, volume, type, AI distance), decode and encode through ffmpeg.
+- `build_sounds.py [--out DIR]`: layered gunshots per weapon from the pack's own recordings (declipped, rebalanced, with synthesised body, crack, action and reverb layers; three takes per layer; mono layers for NPCs, stereo for the player), the matching `[smallcal_<w>_snd_shoot]` / `_actor` sections, and relevelled handling sounds. Needs ffmpeg with libvorbis.
