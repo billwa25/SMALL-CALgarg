@@ -212,8 +212,8 @@ anm_idle_moving                          = cvp1908_hand_walk, cvp1908_idle
 anm_idle_moving_crouch                   = cvp1908_hand_walk, cvp1908_idle
 anm_idle_moving_crouch_empty             = cvp1908_hand_walk, cvp1908_idle
 anm_idle_moving_empty                    = cvp1908_hand_walk, cvp1908_idle
-anm_idle_sprint                          = cvp1908_hand_sprint, cvp1908_idle
-anm_idle_sprint_empty                    = cvp1908_hand_sprint, cvp1908_idle
+anm_idle_sprint                          = cvp1908_hand_sprint, cvp1908_idle, 1.3
+anm_idle_sprint_empty                    = cvp1908_hand_sprint, cvp1908_idle, 1.3
 anm_reload                               = cvp1908_hand_reload, cvp1908_reload
 anm_reload_empty                         = cvp1908_hand_reload_empty, cvp1908_reload_empty 
 anm_reload_misfire                       = cvp1908_hand_unjam, cvp1908_unjam
@@ -227,19 +227,19 @@ anm_bore                                 = cvp1908_hand_inspect, cvp1908_idle
 anm_bore_empty                           = cvp1908_hand_inspect, cvp1908_idle
 
 
-anm_hide_jammed                        = cvp1908_hand_walktosprint, cvp1908_idle_jam         
+anm_hide_jammed                        = cvp1908_hand_holster, cvp1908_idle_jam         
 anm_idle_jammed                        = cvp1908_hand_idle, cvp1908_idle_jam
 anm_idle_aim_jammed                    = cvp1908_hand_aim, cvp1908_idle_jam
 anm_idle_aim_moving_jammed             = cvp1908_hand_walk, cvp1908_idle_jam, 0.75
 anm_idle_aim_moving_crouch_jammed      = cvp1908_hand_walk, cvp1908_idle_jam,  0.7
 anm_idle_moving_jammed                 = cvp1908_hand_walk, cvp1908_idle_jam
 anm_idle_moving_crouch_jammed          = cvp1908_hand_walk, cvp1908_idle_jam, 0.7
-anm_idle_sprint_jammed                 = cvp1908_hand_sprint, cvp1908_idle_jam
-anm_show_jammed                        = cvp1908_hand_sprinttowalk, cvp1908_idle_jam
+anm_idle_sprint_jammed                 = cvp1908_hand_sprint, cvp1908_idle_jam, 1.3
+anm_show_jammed                        = cvp1908_hand_draw, cvp1908_idle_jam
 anm_bore_jammed                        = cvp1908_hand_inspect, cvp1908_idle_jam
 
-        anm_sprint_start             = cvp1908_hand_walktosprint
-        anm_sprint_end               = cvp1908_hand_sprinttowalk
+        anm_sprint_start             = cvp1908_hand_walktosprint, cvp1908_idle
+        anm_sprint_end               = cvp1908_hand_sprinttowalk, cvp1908_idle
 		anm_sprint_start_empty       = cvp1908_hand_walktosprint, cvp1908_idle
         anm_sprint_end_empty         = cvp1908_hand_sprinttowalk, cvp1908_idle
 		anm_sprint_start_jammed      = cvp1908_hand_walktosprint, cvp1908_idle_jam   

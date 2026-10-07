@@ -209,8 +209,8 @@ anm_idle_moving                          = hand_sav1907_walk, sav1907_idle
 anm_idle_moving_crouch                   = hand_sav1907_walk, sav1907_idle
 anm_idle_moving_crouch_empty             = hand_sav1907_walk, sav1907_idle
 anm_idle_moving_empty                    = hand_sav1907_walk, sav1907_idle
-anm_idle_sprint                          = hand_sav1907_sprint, sav1907_idle
-anm_idle_sprint_empty                    = hand_sav1907_sprint, sav1907_idle
+anm_idle_sprint                          = hand_sav1907_sprint, sav1907_idle, 1.3
+anm_idle_sprint_empty                    = hand_sav1907_sprint, sav1907_idle, 1.3
 anm_reload                               = hand_sav1907_reload, sav1907_reload
 anm_reload_empty                         = hand_sav1907_reload_empty, sav1907_reload_empty 
 anm_reload_misfire                       = hand_sav1907_unjam, sav1907_unjam
@@ -233,16 +233,16 @@ anm_idle_aim_moving_jammed             = hand_sav1907_walk, sav1907_idle_jam, 0.
 anm_idle_aim_moving_crouch_jammed      = hand_sav1907_walk, sav1907_idle_jam,  0.7
 anm_idle_moving_jammed                 = hand_sav1907_walk, sav1907_idle_jam
 anm_idle_moving_crouch_jammed          = hand_sav1907_walk, sav1907_idle_jam, 0.7
-anm_idle_sprint_jammed                 = hand_sav1907_sprint, sav1907_idle_jam
+anm_idle_sprint_jammed                 = hand_sav1907_sprint, sav1907_idle_jam, 1.3
 anm_show_jammed                        = hand_sav1907_draw, sav1907_idle_jam
 anm_bore_jammed                        = hand_sav1907_inspect, sav1907_idle_jam
 
-        anm_sprint_start             = hand_sav1907_holster
-        anm_sprint_end               = hand_sav1907_draw
-		anm_sprint_start_empty       = hand_sav1907_holster, sav1907_idle
-        anm_sprint_end_empty         = hand_sav1907_draw, sav1907_idle
-		anm_sprint_start_jammed      = hand_sav1907_holster, sav1907_idle_jam   
-		anm_sprint_end_jammed        = hand_sav1907_draw, sav1907_idle_jam
+        anm_sprint_start             = hand_sav1907_sprint_start, sav1907_idle
+        anm_sprint_end               = hand_sav1907_sprint_end, sav1907_idle
+		anm_sprint_start_empty       = hand_sav1907_sprint_start, sav1907_idle
+        anm_sprint_end_empty         = hand_sav1907_sprint_end, sav1907_idle
+		anm_sprint_start_jammed      = hand_sav1907_sprint_start, sav1907_idle_jam
+		anm_sprint_end_jammed        = hand_sav1907_sprint_end, sav1907_idle_jam
 		
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 

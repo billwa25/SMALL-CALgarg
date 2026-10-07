@@ -206,7 +206,7 @@ safemode_anm2				=
 anm_hide                                 = hand_trejo22_holster, trejo22_idle
 anm_hide_empty                           = hand_trejo22_holster_nosaf, trejo22_empty
 anm_idle                                 = hand_trejo22_idle, trejo22_idle
-anm_idle_jammed                          = hand_trejo22_idle_nosaf, trejo22_jam
+anm_idle_jammed                          = hand_trejo22_idle, trejo22_jam
 anm_idle_aim                             = hand_trejo22_aim, trejo22_idle
 anm_idle_aim_empty                       = hand_trejo22_aim, trejo22_empty
 anm_idle_aim_moving                      = hand_trejo22_walk, trejo22_idle, 0.75
@@ -218,8 +218,8 @@ anm_idle_moving                          = hand_trejo22_walk, trejo22_idle
 anm_idle_moving_crouch                   = hand_trejo22_walk, trejo22_idle
 anm_idle_moving_crouch_empty             = hand_trejo22_walk, trejo22_empty
 anm_idle_moving_empty                    = hand_trejo22_walk, trejo22_empty
-anm_idle_sprint                          = hand_trejo22_sprint, trejo22_idle
-anm_idle_sprint_empty                    = hand_trejo22_sprint, trejo22_empty
+anm_idle_sprint                          = hand_trejo22_sprint, trejo22_idle, 1.3
+anm_idle_sprint_empty                    = hand_trejo22_sprint, trejo22_empty, 1.3
 anm_reload                               = hand_trejo22_reload, trejo22_reload
 anm_reload_empty                         = hand_trejo22_reload_empty, trejo22_reload_empty
 anm_reload_misfire                       = hand_trejo22_unjam, trejo22_unjam
@@ -238,7 +238,7 @@ anm_idle_aim_moving_jammed             = hand_trejo22_walk, trejo22_jam, 0.75
 anm_idle_aim_moving_crouch_jammed      = hand_trejo22_walk, trejo22_jam,  0.7
 anm_idle_moving_jammed                 = hand_trejo22_walk, trejo22_jam
 anm_idle_moving_crouch_jammed          = hand_trejo22_walk, trejo22_jam, 0.7
-anm_idle_sprint_jammed                 = hand_trejo22_sprint, trejo22_jam
+anm_idle_sprint_jammed                 = hand_trejo22_sprint, trejo22_jam, 1.3
 anm_show_jammed                        = hand_trejo22_draw_nosaf, trejo22_jam
 
 anm_bore                                 = hand_trejo22_inspect, trejo22_idle
@@ -247,12 +247,12 @@ anm_bore_jammed                        = hand_trejo22_inspect, trejo22_jam
 
 ;--- Переходы спринта---
 
-        anm_sprint_start             = hand_trejo22_holster_nosaf, trejo22_idle
-        anm_sprint_end               = hand_trejo22_draw_nosaf, trejo22_idle
-		anm_sprint_start_empty       = hand_trejo22_holster_nosaf, trejo22_empty
-        anm_sprint_end_empty         = hand_trejo22_draw_nosaf, trejo22_empty
-		anm_sprint_start_jammed      = hand_trejo22_holster_nosaf, trejo22_jam   
-        anm_sprint_end_jammed        = hand_trejo22_draw_nosaf, trejo22_jam
+        anm_sprint_start             = hand_trejo22_sprint_start, trejo22_idle
+        anm_sprint_end               = hand_trejo22_sprint_end, trejo22_idle
+		anm_sprint_start_empty       = hand_trejo22_sprint_start, trejo22_empty
+        anm_sprint_end_empty         = hand_trejo22_sprint_end, trejo22_empty
+		anm_sprint_start_jammed      = hand_trejo22_sprint_start, trejo22_jam
+        anm_sprint_end_jammed        = hand_trejo22_sprint_end, trejo22_jam
 		
 
 ;--- Паттерны спринта---

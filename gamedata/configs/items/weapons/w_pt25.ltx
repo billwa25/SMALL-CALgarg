@@ -219,8 +219,8 @@ anm_idle_moving                          = hand_pt25_walk, pt25_idle
 anm_idle_moving_crouch                   = hand_pt25_walk, pt25_idle
 anm_idle_moving_crouch_empty             = hand_pt25_walk, pt25_idle
 anm_idle_moving_empty                    = hand_pt25_walk, pt25_idle
-anm_idle_sprint                          = hand_pt25_sprint, pt25_idle
-anm_idle_sprint_empty                    = hand_pt25_sprint, pt25_idle
+anm_idle_sprint                          = hand_pt25_sprint, pt25_idle, 1.3
+anm_idle_sprint_empty                    = hand_pt25_sprint, pt25_idle, 1.3
 anm_reload                               = hand_pt25_reload, pt25_reload
 anm_reload_empty                         = hand_pt25_reload_empty, pt25_reload_empty 
 anm_reload_misfire                       = hand_pt25_unjam, pt25_unjam
@@ -244,17 +244,17 @@ anm_idle_aim_moving_jammed             = hand_pt25_walk, pt25_idle_jam, 0.75
 anm_idle_aim_moving_crouch_jammed      = hand_pt25_walk, pt25_idle_jam,  0.7
 anm_idle_moving_jammed                 = hand_pt25_walk, pt25_idle_jam
 anm_idle_moving_crouch_jammed          = hand_pt25_walk, pt25_idle_jam, 0.7
-anm_idle_sprint_jammed                 = hand_pt25_sprint, pt25_idle_jam
+anm_idle_sprint_jammed                 = hand_pt25_sprint, pt25_idle_jam, 1.3
 anm_show_jammed                        = hand_pt25_draw, pt25_idle_jam
 anm_bore_jammed                        = hand_pt25_inspect_jam, pt25_inspect_jam
 
-        anm_sprint_start             = hand_pt25_holster
-        anm_sprint_end               = hand_pt25_draw
-	anm_sprint_start_empty       = hand_pt25_holster, pt25_idle
-        anm_sprint_end_empty         = hand_pt25_draw, pt25_idle
+        anm_sprint_start             = hand_pt25_sprint_start, pt25_idle
+        anm_sprint_end               = hand_pt25_sprint_end, pt25_idle
+	anm_sprint_start_empty       = hand_pt25_sprint_start, pt25_idle
+        anm_sprint_end_empty         = hand_pt25_sprint_end, pt25_idle
 
-	anm_sprint_start_jammed      = hand_pt25_holster, pt25_idle_jam   
-	anm_sprint_end_jammed        = hand_pt25_draw, pt25_idle_jam		
+	anm_sprint_start_jammed      = hand_pt25_sprint_start, pt25_idle_jam
+	anm_sprint_end_jammed        = hand_pt25_sprint_end, pt25_idle_jam
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
