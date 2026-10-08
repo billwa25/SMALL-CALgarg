@@ -8,7 +8,7 @@ Per weapon:   very_close (npc, mono, one per take) + close (npc, mono, one per t
               + echo (6 of the 18 shared echoes)                                              -> [smallcal_<w>_snd_shoot]
               1p (actor, stereo, one per take) + echo                                          -> [smallcal_<w>_snd_shoot_actor]
 
-python tools/mix_ds.py [--out DIR] [--keys a,b] [--wire] [--ds-db -7]"""
+python tools/mix_ds.py [--out DIR] [--keys a,b] [--wire] [--ds-db -4.5]"""
 import sys, os, argparse, shutil, glob
 sys.path.insert(0, os.path.dirname(__file__))
 import numpy as np
@@ -152,7 +152,7 @@ def clean_stale(key, w, out_dir, keep):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('--out', default=SND); ap.add_argument('--keys', default=','.join(DONORS)); ap.add_argument('--wire', action='store_true'); ap.add_argument('--ds-db', type=float, default=-7.0)
+    ap.add_argument('--out', default=SND); ap.add_argument('--keys', default=','.join(DONORS)); ap.add_argument('--wire', action='store_true'); ap.add_argument('--ds-db', type=float, default=-4.5)
     a = ap.parse_args()
     profiles = pp.profiles(SOURCES)
     install_echoes(a.out)
