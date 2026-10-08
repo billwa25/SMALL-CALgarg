@@ -27,7 +27,7 @@ DONORS = {
     'trejo22': dict(player=('stereo/../mono/vz61', [4, 5, 6]), npc='fiveseven', echo=[2, 5, 8, 11, 14, 17], ds_db=-1.0, pop=True, line_vol=1.15),
     '9galo22': dict(player=('stereo/../mono/vz61', [2, 4, 6]), npc='fiveseven', echo=[3, 6, 9, 12, 15, 18], ds_db=-1.0, pop=True, line_vol=1.15),
     'pt25': dict(player=('stereo/pm', [1, 2, 3]), npc='fiveseven', echo=[1, 5, 9, 13, 17, 3], ds_db=0.0),
-    'cvp1908': dict(player=('stereo/fort12', [1, 2, 3]), npc='fiveseven', echo=[2, 6, 10, 14, 18, 4], ds_db=0.0),
+    'cvp1908': dict(player=('stereo/hpsa', [1, 2, 3]), npc='fiveseven', echo=[2, 6, 10, 14, 18, 4], ds_db=0.0),
     'sav1907': dict(player=('stereo/../mono/vz61', [1, 3, 5, 2]), npc='fiveseven', echo=[3, 7, 11, 15, 1, 5], ds_db=0.0),
     'rem51': dict(player=('stereo/pm', [1, 2, 3, 4, 1, 2]), npc='gsh18', echo=[4, 8, 12, 16, 2, 6], ds_db=0.0),
     'cpp38': dict(player=('stereo/beretta', [1, 2, 3, 4]), npc='gsh18', echo=[5, 9, 13, 17, 3, 7], ds_db=0.0),
