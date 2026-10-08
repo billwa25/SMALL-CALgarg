@@ -1,6 +1,8 @@
 """Layered gunshots for the small-calibre pack, built from the pack's own recordings (sources/pocketpops): every close and
-first-person layer is one of the real shots, cleaned and shaped by tools/pocketpops.py; action clicks are cut from the unjam
-recordings; the tails are echoes of the shot itself; the dry-fire clicks are the recorded empties, cleaned.
+first-person layer is one of the real shots, cleaned and shaped by tools/pocketpops.py and then matched to the measured
+reference gunshots (tools/reference.py: pressure pulse from the shot itself, octave balance per time window, envelope,
+density); action clicks are cut from the unjam recordings; the tails are echoes of the shot itself; the dry-fire clicks are
+the recorded empties, cleaned.
 
 Per weapon:  close (npc, mono, one per take) + mech (semi-autos, 2) + tail (3) + far (2)      -> [smallcal_<w>_snd_shoot]
              1p (actor, stereo, one per take) + mech + 1p tail (stereo, 2)                    -> [smallcal_<w>_snd_shoot_actor]
@@ -15,6 +17,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import numpy as np
 import oggx
 import pocketpops as pp
+import reference
 
 SR = 44100
 ROOT = os.path.join(os.path.dirname(__file__), '..', 'gamedata')
@@ -56,14 +59,14 @@ WEAPONS = {
                   takes=['38s-1', '38s-2', '38s-3', '38s-4'], empty=('38s-empty3', 1.0)),
 }
 
-# calibre profile: echo T60 s, far low-pass Hz, action level
+# calibre profile: echo T60 s, far low-pass Hz, action level, low-end pulse relative to the reference (dB)
 CAL = {
-    '22lr': dict(t60=0.8, far_lp=1800, mech_level=0.30),
-    '22lr_rev': dict(t60=0.9, far_lp=1800, mech_level=0.0),
-    '25acp': dict(t60=0.9, far_lp=1800, mech_level=0.34),
-    '32acp': dict(t60=1.0, far_lp=1600, mech_level=0.36),
-    '380acp': dict(t60=1.1, far_lp=1500, mech_level=0.38),
-    '38spl': dict(t60=1.2, far_lp=1400, mech_level=0.0),
+    '22lr': dict(t60=0.8, far_lp=1800, mech_level=0.30, lf_db=-1.5),
+    '22lr_rev': dict(t60=0.9, far_lp=1800, mech_level=0.0, lf_db=-0.5),
+    '25acp': dict(t60=0.9, far_lp=1800, mech_level=0.34, lf_db=-1.0),
+    '32acp': dict(t60=1.0, far_lp=1600, mech_level=0.36, lf_db=-0.5),
+    '380acp': dict(t60=1.1, far_lp=1500, mech_level=0.38, lf_db=0.0),
+    '38spl': dict(t60=1.2, far_lp=1400, mech_level=0.0, lf_db=0.5),
 }
 
 
@@ -228,9 +231,10 @@ def actor_shot(st, rng, width=0.5):
 
 # ---------------------------------------------------------------------------------------------------------------------- build
 
-def build_weapon(key, w, out_dir, profiles, log=print):
+def build_weapon(key, w, out_dir, profiles, log=print, target=None):
     rng = np.random.default_rng(w.get('seed', 11) * 1000 + sum(map(ord, key)))
     cal = CAL[w['cal']]
+    target = target or reference.load_target()
     folder = os.path.join(out_dir, w['folder']); os.makedirs(folder, exist_ok=True)
     auto = w.get('auto', False)
     files = {}
@@ -244,10 +248,13 @@ def build_weapon(key, w, out_dir, profiles, log=print):
         mono, st, info = pp.shot(os.path.join(SOURCES, name + '.ogg'), profiles)
         if ratio != 1.0:
             mono, st = resample(mono, ratio), resample(st, ratio)
+        mono, m_info = reference.match(mono, target, cal['lf_db'])
         closes.append(mono); stereos.append(st)
-        log(f"  {key}: take {name:12s} {len(mono) / SR:.2f}s" + (f"  brass cut at {info['brass_cut_ms']:.0f} ms" if info['brass_cut_ms'] else ''))
+        met = reference.metrics(mono, target)
+        log(f"  {key}: take {name:12s} {len(mono) / SR:.2f}s  crest {met['crest_db']:.1f} env err {met['env_rms_err_db']:.1f} dB  thump x{m_info['thump']:.2f} drive {m_info['drive_db']:.1f} dB"
+            + (f"  brass cut at {info['brass_cut_ms']:.0f} ms" if info['brass_cut_ms'] else ''))
     for i, c in enumerate(closes):
-        put('close', i + 1, soft_clip(normalize(c, -1.0)), 'npc_close')
+        put('close', i + 1, c, 'npc_close')
     if w['mech']:
         handling = oggx.decode(os.path.join(SND, w['folder'], w['unjam']))
         for i in range(2):
@@ -257,7 +264,8 @@ def build_weapon(key, w, out_dir, profiles, log=print):
     for i in range(2):
         put('far', i + 1, far_layer(closes[i % len(closes)], cal, rng, auto=auto), 'npc_far')
     for i, st in enumerate(stereos):
-        put('1p', i + 1, actor_shot(st, rng), 'actor_shot')
+        y, _ = reference.match(actor_shot(st, rng), target, cal['lf_db'])
+        put('1p', i + 1, y, 'actor_shot')
     for i in range(2):
         put('1p_tail', i + 1, tail_layer(closes[i % len(closes)], cal, rng, stereo=True, auto=auto), 'actor_tail')
     name, ratio = w['empty']
@@ -356,11 +364,11 @@ if __name__ == '__main__':
     ap.add_argument('--out', default=SND); ap.add_argument('--keys', default=','.join(WEAPONS))
     ap.add_argument('--wire', action='store_true'); ap.add_argument('--handling', action='store_true')
     a = ap.parse_args()
-    profiles = pp.profiles(SOURCES)
+    profiles = pp.profiles(SOURCES); target = reference.load_target()
     allsec = {}
     for key in a.keys.split(','):
         w = WEAPONS[key]
-        files = build_weapon(key, w, a.out, profiles)
+        files = build_weapon(key, w, a.out, profiles, target=target)
         allsec[key] = sections(key, w, files)
         print(key, {k: len(v) for k, v in files.items()})
         if a.wire:
