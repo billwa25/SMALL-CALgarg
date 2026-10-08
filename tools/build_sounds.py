@@ -359,7 +359,7 @@ def sections(key, w, files):
     return (f"\n[smallcal_{key}_snd_shoot]\n" + '\n'.join(L) + f"\n\n[smallcal_{key}_snd_shoot_actor]\n" + '\n'.join(A) + '\n')
 
 
-def wire(key, w, files, text):
+def wire(key, w, files, text, sections_fn=None):
     """the weapon's config: the layered sections after the marker rewritten, snd_empty added to every section that sets
     snd_shoot.  Lines keep their own terminators"""
     lines = text.splitlines(keepends=True)
@@ -393,7 +393,7 @@ def wire(key, w, files, text):
     body = ''.join(out)
     if not body.endswith(nl):
         body += nl
-    return body + nl + MARK + nl + sections(key, w, files).replace('\n', nl)
+    return body + nl + MARK + nl + (sections_fn or sections)(key, w, files).replace('\n', nl)
 
 
 HANDLING_LEVELS = {'draw': -6.0, 'holster': -6.0, 'reload': -3.0, 'unjam': -3.0, 'inspect': -3.0}
