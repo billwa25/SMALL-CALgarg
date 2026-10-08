@@ -8,7 +8,7 @@ Per weapon:   very_close (npc, mono, one per take) + close (npc, mono, one per t
               + echo (6 of the 18 shared echoes)                                              -> [smallcal_<w>_snd_shoot]
               1p (actor, stereo, one per take) + echo                                          -> [smallcal_<w>_snd_shoot_actor]
 
-python tools/mix_ds.py [--out DIR] [--keys a,b] [--wire] [--ds-db -4]"""
+python tools/mix_ds.py [--out DIR] [--keys a,b] [--wire] [--ds-db -7]"""
 import sys, os, argparse, shutil, glob
 sys.path.insert(0, os.path.dirname(__file__))
 import numpy as np
@@ -20,13 +20,14 @@ SOURCES = bs.SOURCES; SND = bs.SND; CFG = bs.CFG
 ECHO_FOLDER = 'smallcal_echo'
 
 # weapon -> Dark Signal donors: the stereo player shot (folder, takes), the mono npc set (folder), echoes (indices),
-# and how far under the recording the Dark Signal shot sits (dB, added to --ds-db)
+# how far under the recording the Dark Signal shot sits (dB, added to --ds-db), the pop treatment and the layer-line
+# volume for the small .22s (their short cracks read flat and quiet next to the others)
 DONORS = {
-    'pt22': dict(player=('stereo/../mono/vz61', [1, 2, 3]), npc='fiveseven', echo=[1, 4, 7, 10, 13, 16], ds_db=-2.0),
-    'trejo22': dict(player=('stereo/../mono/vz61', [4, 5, 6]), npc='fiveseven', echo=[2, 5, 8, 11, 14, 17], ds_db=-2.0),
-    '9galo22': dict(player=('stereo/../mono/vz61', [2, 4, 6]), npc='fiveseven', echo=[3, 6, 9, 12, 15, 18], ds_db=-1.0),
-    'pt25': dict(player=('stereo/pm', [1, 2, 3]), npc='fiveseven', echo=[1, 5, 9, 13, 17, 3], ds_db=-1.0),
-    'cvp1908': dict(player=('stereo/fort12', [1, 2, 3]), npc='fiveseven', echo=[2, 6, 10, 14, 18, 4], ds_db=-1.0),
+    'pt22': dict(player=('stereo/../mono/vz61', [1, 2, 3]), npc='fiveseven', echo=[1, 4, 7, 10, 13, 16], ds_db=-1.0, pop=True, line_vol=1.15),
+    'trejo22': dict(player=('stereo/../mono/vz61', [4, 5, 6]), npc='fiveseven', echo=[2, 5, 8, 11, 14, 17], ds_db=-1.0, pop=True, line_vol=1.15),
+    '9galo22': dict(player=('stereo/../mono/vz61', [2, 4, 6]), npc='fiveseven', echo=[3, 6, 9, 12, 15, 18], ds_db=-1.0, pop=True, line_vol=1.15),
+    'pt25': dict(player=('stereo/pm', [1, 2, 3]), npc='fiveseven', echo=[1, 5, 9, 13, 17, 3], ds_db=0.0),
+    'cvp1908': dict(player=('stereo/fort12', [1, 2, 3]), npc='fiveseven', echo=[2, 6, 10, 14, 18, 4], ds_db=0.0),
     'sav1907': dict(player=('stereo/../mono/vz61', [1, 3, 5, 2]), npc='fiveseven', echo=[3, 7, 11, 15, 1, 5], ds_db=0.0),
     'rem51': dict(player=('stereo/pm', [1, 2, 3, 4, 1, 2]), npc='gsh18', echo=[4, 8, 12, 16, 2, 6], ds_db=0.0),
     'cpp38': dict(player=('stereo/beretta', [1, 2, 3, 4]), npc='gsh18', echo=[5, 9, 13, 17, 3, 7], ds_db=0.0),
@@ -57,11 +58,24 @@ def narrow(st, width=0.5):
     return np.stack([mid + width * side, mid - width * side], 1)
 
 
-def mix(rec, ds, ds_db):
-    """the recording at -1 dBFS, high-passed at 70 Hz (wind rumble; the Dark Signal shot supplies the lows), the Dark Signal
-    shot aligned to its onset `ds_db` under it; the file runs as long as the longer of the two"""
+def popify(rec, shelf_db=5.0, drive=1.0):
+    """more pop for a short, flat crack: a 1.5 kHz shelf over the first 8 ms and saturation of the first 10 ms, then a
+    gentle broadband saturation so the file carries more energy at the same peak"""
+    m = rec if rec.ndim == 1 else rec.mean(1); i0 = reference.onset(m)
+    rec = reference.pop(rec, i0, gain_db=shelf_db, tau=0.008)
+    t = (np.arange(len(rec)) - i0) / SR; g = 1 + drive * np.exp(-np.maximum(t, 0) / 0.010) * (t >= 0)
+    rec = rec / (np.abs(rec).max() + 1e-9)
+    rec = np.tanh(rec * (g if rec.ndim == 1 else g[:, None])) / np.tanh(1 + drive)
+    return np.tanh(1.3 * rec) / np.tanh(1.3)
+
+
+def mix(rec, ds, ds_db, pop=False):
+    """the recording at -1 dBFS (-0.3 with the pop treatment), high-passed at 70 Hz (wind rumble; the Dark Signal shot
+    supplies the lows), the Dark Signal shot aligned to its onset `ds_db` under it; the file runs as long as the longer"""
     rec = np.stack([pp.highpass(rec[:, c], 70, 4) for c in range(2)], 1) if rec.ndim == 2 else pp.highpass(rec, 70, 4)
-    rec = rec / (np.abs(rec).max() + 1e-9) * db(-1.0)
+    if pop:
+        rec = popify(rec)
+    rec = rec / (np.abs(rec).max() + 1e-9) * db(-0.3 if pop else -1.0)
     ds = ds / (np.abs(ds).max() + 1e-9) * db(-1.0 + ds_db)
     if rec.ndim == 2 and ds.ndim == 1:
         ds = np.stack([ds, ds], 1)
@@ -93,20 +107,20 @@ def build_weapon(key, w, d, out_dir, profiles, ds_db, log=print):
     pfolder, ptakes = d['player']
     for i, st in enumerate(stereos):
         p = ds_path(f"{pfolder}/close_{ptakes[i % len(ptakes)]}.ogg")
-        put('1p', i + 1, mix(st, load(p), level), header(p))
+        put('1p', i + 1, mix(st, load(p), level, d.get('pop', False)), header(p))
     npc = d['npc']
     for kind in ('very_close', 'close'):
         takes = sorted(glob.glob(ds_path(f"mono/{npc}/{kind}_[0-9].ogg")))
         for i, m in enumerate(monos):
             p = takes[i % len(takes)]
-            put(kind, i + 1, mix(m, load(p), level), header(p))
+            put(kind, i + 1, mix(m, load(p), level, d.get('pop', False)), header(p))
     for kind in ('close_distance', 'medium_distance'):
         takes = sorted(p for p in glob.glob(ds_path(f"mono/{npc}/*.ogg")) if os.path.basename(p).lower().startswith(kind))
         for i in range(3):
             src = takes[i % len(takes)]; name = f"{key}_{kind}_{i + 1}"
             shutil.copyfile(src, os.path.join(folder, name + '.ogg')); files.setdefault(kind, []).append(name)
     files['echo'] = [f"echo_{n}" for n in d['echo']]
-    log(f"  {key}: {len(monos)} recordings as the fire sounds; Dark Signal {pfolder.split('/')[-1]} (player) / {npc} (npc) at {level:+.0f} dB under them")
+    log(f"  {key}: {len(monos)} recordings as the fire sounds{' with the pop treatment' if d.get('pop') else ''}; Dark Signal {pfolder.split('/')[-1]} (player) / {npc} (npc) at {level:+.0f} dB under them")
     return files
 
 
@@ -118,10 +132,12 @@ def install_echoes(out_dir):
 
 def sections(key, w, files):
     p = f"weapons\\{w['folder']}\\"; e = f"weapons\\{ECHO_FOLDER}\\"
-    def layer(n, names, prefix):
-        return [f"snd_{n}_layer{'' if i == 0 else i} = {prefix}{nm}" for i, nm in enumerate(names)]
-    L = layer(1, files['very_close'], p) + layer(2, files['close'], p) + layer(3, files['close_distance'], p) + layer(4, files['medium_distance'], p) + layer(5, files['echo'], e)
-    A = layer(1, files['1p'], p) + layer(2, files['echo'], e)
+    lv = DONORS[key].get('line_vol')
+    def layer(n, names, prefix, vol=None):
+        tail = f", {vol:g}, 0" if vol else ''
+        return [f"snd_{n}_layer{'' if i == 0 else i} = {prefix}{nm}{tail}" for i, nm in enumerate(names)]
+    L = layer(1, files['very_close'], p, lv) + layer(2, files['close'], p, lv) + layer(3, files['close_distance'], p) + layer(4, files['medium_distance'], p) + layer(5, files['echo'], e)
+    A = layer(1, files['1p'], p, lv) + layer(2, files['echo'], e)
     return (f"\n[smallcal_{key}_snd_shoot]\n" + '\n'.join(L) + f"\n\n[smallcal_{key}_snd_shoot_actor]\n" + '\n'.join(A) + '\n')
 
 
@@ -136,7 +152,7 @@ def clean_stale(key, w, out_dir, keep):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('--out', default=SND); ap.add_argument('--keys', default=','.join(DONORS)); ap.add_argument('--wire', action='store_true'); ap.add_argument('--ds-db', type=float, default=-4.0)
+    ap.add_argument('--out', default=SND); ap.add_argument('--keys', default=','.join(DONORS)); ap.add_argument('--wire', action='store_true'); ap.add_argument('--ds-db', type=float, default=-7.0)
     a = ap.parse_args()
     profiles = pp.profiles(SOURCES)
     install_echoes(a.out)

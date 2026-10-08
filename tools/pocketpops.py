@@ -221,7 +221,7 @@ def splice_gap(seg, mc, drop_db=-24.0, back_db=-20.0, search_ms=80):
     return out, (b - a) / SR * 1000
 
 
-def decay_curve(m, crack_ms=25, body_db=-3.0, body_tau=0.035, tail_db=-20.0, tail_tau=0.15, fill_db=-9.0, fill_max_db=12.0):
+def decay_curve(m, crack_ms=25, body_db=-2.0, body_tau=0.040, tail_db=-17.0, tail_tau=0.18, fill_db=-9.0, fill_max_db=12.0):
     """time gain curve: nothing above a target decay.  The first `crack_ms` (the crack, level C = its 10 ms rms peak) are
     untouched; after it the envelope may not exceed C+body_db falling with `body_tau`, nor C+tail_db falling with `tail_tau`
     (the slower of the two wins).  The gain is only ever <= 1 there, so a recording that already decays faster than the target
