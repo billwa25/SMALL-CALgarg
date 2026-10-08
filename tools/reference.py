@@ -21,8 +21,8 @@ TYPES = ['very_close', 'close', 'close_distance', 'medium_distance']
 HEADERS = {                                    # X-Ray comment per layer type, as the reference pack has them
     'very_close': (15.0, 40.0, 2.0, 2149580800, 150.0),
     'close': (20.0, 75.0, 1.0, 2149580800, 150.0),
-    'close_distance': (25.0, 135.0, 1.0, 134217856, 1.0),
-    'medium_distance': (25.0, 200.0, 0.75, 134217856, 1.0),
+    'close_distance': (25.0, 135.0, 1.25, 134217856, 1.0),
+    'medium_distance': (25.0, 200.0, 1.0, 134217856, 1.0),
 }
 CLASSES = {'small': ['vz61'], 'medium': ['pm', 'fort12'], 'all': None}   # reference weapons per calibre class
 TARGET_PATH = os.path.join(os.path.dirname(__file__), 'reference_target.json')
@@ -178,7 +178,7 @@ def add_thump(x, T, i0, lf_db=0.0):
     return mixed(lvl), lvl
 
 
-LIFT_MAX = [8.0, 10.0] + [12.0] * 8                 # dB of lift allowed per band
+LIFT_MAX = [0.0, 4.0] + [12.0] * 8                  # dB of lift allowed per band: none under 60 Hz, little under 120
 
 
 def renorm(levels, from_band):
@@ -208,6 +208,17 @@ def min_phase_highpass(x, fc, order=8):
         n = len(v) + len(h) - 1; N = 1 << (n - 1).bit_length()
         return np.fft.irfft(np.fft.rfft(v, N) * np.fft.rfft(h, N), N)[:len(v)]
     return conv(x) if x.ndim == 1 else np.stack([conv(x[:, c]) for c in range(2)], 1)
+
+
+def pop(x, i0, gain_db=4.0, fc=1500.0, tau=0.006):
+    """the pop: a high shelf from `fc` blended in over the first milliseconds of the shot only (minimum phase)"""
+    h = min_phase_ir(lambda f: 1 + (db(gain_db) - 1) / (1 + (fc / np.maximum(f, 1e-3)) ** 2))
+    def conv(v):
+        n = len(v) + len(h) - 1; N = 1 << (n - 1).bit_length()
+        return np.fft.irfft(np.fft.rfft(v, N) * np.fft.rfft(h, N), N)[:len(v)]
+    bright = conv(x) if x.ndim == 1 else np.stack([conv(x[:, c]) for c in range(2)], 1)
+    t = (np.arange(len(x)) - i0) / SR; w = np.where(t >= 0, np.exp(-np.maximum(t, 0) / tau), 0.0)
+    return x + (bright - x) * (w if x.ndim == 1 else w[:, None])
 
 
 def apply_eq(x, gains):
@@ -246,7 +257,7 @@ def match_eq(x, T, i0, max_db=12.0, passes=2, from_band=0):
     return y, total
 
 
-def match_envelope(x, T, i0, lift_max_db=10.0, cut_max_db=24.0, lift_below_db=None, keep_attack=True):
+def match_envelope(x, T, i0, lift_max_db=10.0, cut_max_db=24.0, lift_below_db=None, keep_attack=True, lift_ms=300):
     """time gain that brings the 5 ms envelope to the target curve over its length, lifting at most lift_max_db (and, with
     lift_below_db, only where the envelope already sits that far under the peak); beyond the curve the shot may only be cut"""
     m = mono(x)
@@ -257,7 +268,7 @@ def match_envelope(x, T, i0, lift_max_db=10.0, cut_max_db=24.0, lift_below_db=No
     t_ms = np.arange(len(m) - i0) / SR * 1000
     ref_full = np.interp(t_ms, np.arange(len(ref)), ref, right=ref[-1])
     g = np.zeros(len(m)); g[i0:] = ref_full - cur[i0:]
-    beyond = np.arange(len(m)) >= i0 + ms(CURVE_MS)
+    beyond = np.arange(len(m)) >= i0 + ms(lift_ms)
     g = np.where(beyond, np.minimum(g, 0.0), np.clip(g, -cut_max_db, lift_max_db))
     if lift_below_db is not None:
         g = np.where(cur > lift_below_db, np.minimum(g, 0.0), g)
@@ -304,16 +315,18 @@ def match(x, T, lf_db=0.0):
     """octave balance per window (above 120 Hz first), the pressure pulse from the shot itself (lf_db None: none, for the
     distance layers), the balance again with the low end, a 30 Hz high-pass, envelope, density, a second envelope
     correction after the limiter, level.  -> matched shot, info"""
-    T = dict(T, peak_dbfs=min(T['peak_dbfs'], -0.3))
+    shot = lf_db is not None
+    T = dict(T, peak_dbfs=min(T['peak_dbfs'], -0.3), crest_db=T['crest_db'] + (1.5 if shot else 0.0))
     x = x / (np.abs(x).max() + 1e-9); i0 = onset(x)
     y, gains = match_eq(x, T, i0, from_band=2)
     lvl = 0.0
     if lf_db is not None:
         y, lvl = add_thump(y, T, i0, lf_db)
     y, gains2 = match_eq(y, T, i0, passes=2)
-    y = min_phase_highpass(y, 25.0, order=2)                        # gentle: a steep one delays the low end by 10 ms
-    shot = lf_db is not None                                        # echo material has a soft onset: shape it too
-    y = match_envelope(y, T, i0, keep_attack=shot)
+    if shot:
+        y = pop(y, i0)
+    y = min_phase_highpass(y, 45.0, order=2)                        # gentle: a steep one delays the low end by 10 ms
+    y = match_envelope(y, T, i0, keep_attack=shot)                  # echo material has a soft onset: shape it too
     pre = y; bias = -1.0
     for _ in range(2):                                              # the envelope correction after the limiter moves the
         y, drive = densify(pre, T, i0, crest_bias_db=bias)          # crest: measure, and run again with the right bias

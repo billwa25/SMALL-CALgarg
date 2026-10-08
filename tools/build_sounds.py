@@ -65,12 +65,12 @@ WEAPONS = {
 # calibre profile: echo T60 s, far low-pass Hz, action level, reference class ('small' = the pack's .32 ACP machine
 # pistol, 'medium' = its 9x18 pistols), low-end pulse relative to that class (dB)
 CAL = {
-    '22lr': dict(t60=0.8, far_lp=1800, mech_level=0.30, cls='small', lf_db=-3.0),
-    '22lr_rev': dict(t60=0.9, far_lp=1800, mech_level=0.0, cls='small', lf_db=-2.0),
-    '25acp': dict(t60=0.9, far_lp=1800, mech_level=0.34, cls='small', lf_db=-1.0),
-    '32acp': dict(t60=1.0, far_lp=1600, mech_level=0.36, cls='small', lf_db=0.0),
-    '380acp': dict(t60=1.1, far_lp=1500, mech_level=0.38, cls='medium', lf_db=0.0),
-    '38spl': dict(t60=1.2, far_lp=1400, mech_level=0.0, cls='medium', lf_db=0.5),
+    '22lr': dict(t60=0.8, far_lp=1800, mech_level=0.30, cls='small', lf_db=-9.0),
+    '22lr_rev': dict(t60=0.9, far_lp=1800, mech_level=0.0, cls='small', lf_db=-8.0),
+    '25acp': dict(t60=0.9, far_lp=1800, mech_level=0.34, cls='small', lf_db=-7.0),
+    '32acp': dict(t60=1.0, far_lp=1600, mech_level=0.36, cls='small', lf_db=-6.0),
+    '380acp': dict(t60=1.1, far_lp=1500, mech_level=0.38, cls='medium', lf_db=-6.0),
+    '38spl': dict(t60=1.2, far_lp=1400, mech_level=0.0, cls='medium', lf_db=-5.5),
 }
 MECH_GAIN = 0.4           # the reference layers carry their own action noise, so the separate click layer sits well back
 
@@ -197,26 +197,77 @@ def echo_ir(t60, rng, n_early=14, length=None, stereo=False, lp_start=6000, lp_e
     return out[:, 0] if not stereo else out
 
 
-def echo_material(shot, t60, rng, lo=200, hi=None, n_early=14, lp_start=6000, lp_end=1500, dense=0.2):
-    """the shot's first 150 ms through a sparse echo response: the raw material of a distance layer"""
-    ir = echo_ir(t60, rng, n_early=n_early, lp_start=lp_start, lp_end=lp_end, dense=dense)
+def echo_material(shot, t60, rng, lo=200, hi=None, n_early=14, lp_start=6000, lp_end=1500, dense=0.2, direct=1.0, length_s=None):
+    """the shot's first 150 ms through a sparse echo response: the raw material of a distance layer (with the direct sound
+    at `direct`, as the pack's layers keep it) or of a tail (direct 0)"""
+    length_s = length_s or t60 * 1.6
+    ir = echo_ir(t60, rng, n_early=n_early, length=int(max(t60 * 1.4, length_s) * SR), lp_start=lp_start, lp_end=lp_end, dense=dense)
     n = int(0.15 * SR); head = np.zeros(n); head[:min(n, len(shot))] = shot[:n]
     head = (bandpass(head, lo, hi, 2) if hi else highpass(head, lo, 2)) * np.linspace(1, 0, n) ** 0.7
-    y = convolve(head, ir)[:int(t60 * 1.6 * SR)]
-    direct = np.zeros(len(y)); direct[:n] = head                         # the direct sound, as the pack's layers keep it
-    return fade_out(y + direct, 150)
+    y = convolve(head, ir)[:int(length_s * SR)]
+    if direct:
+        y[:n] += head * direct
+    return fade_out(y, 150)
+
+
+def env5(x):
+    m = x if x.ndim == 1 else x.mean(1)
+    return pp.envelope(m, 5)
+
+
+def with_tail(shot, cal, T, rng, length_s, join_ms=250, end_db=-80.0, lo=250):
+    """the shot plus its own echo: echo material shaped to the reference curve up to `join_ms` after the onset and from
+    there to an exponential decay reaching `end_db` at `length_s`, a final fade; the layer never ends on a cliff"""
+    n = int(length_s * SR); ch = 1 if shot.ndim == 1 else 2
+    y = np.zeros((n,) if ch == 1 else (n, ch)); y[:min(n, len(shot))] = shot[:n]
+    peak = env5(shot).max() + 1e-9                                       # the curve is relative to the 5 ms envelope's peak
+    echo = echo_material(shot if ch == 1 else shot.mean(1), max(cal['t60'] * 1.2, length_s / 1.6) * rng.uniform(0.9, 1.1), rng, lo=lo, direct=0.0, length_s=length_s + 0.2)
+    echo = np.concatenate([echo, np.zeros(max(0, n - len(echo)))])[:n]
+    echo *= peak / (env5(echo).max() + 1e-9)                             # same envelope scale as the shot
+    i0 = reference.onset(shot); j = i0 + int(join_ms * SR / 1000)
+    t = np.arange(n) / SR; tj = j / SR
+    ref = np.array(T['env_db'], float); ref = np.interp(np.arange(len(ref)), np.nonzero(~np.isnan(ref))[0], ref[~np.isnan(ref)])
+    curve = np.interp((np.arange(n) - i0) / SR * 1000, np.arange(len(ref)), ref, left=ref[0], right=ref[-1])
+    at_join = float(ref[join_ms])
+    tail_db = at_join + (end_db - at_join) * np.clip((t - tj) / max(length_s - tj, 0.1), 0, 1)
+    target = peak * db(np.where(t > tj, tail_db, curve))
+    e = np.maximum(env5(echo), 1e-9)
+    g = target / e
+    g[:j] = np.minimum(g[:j], 1.0)                                       # before the join the echo only ever sits under the curve
+    g = np.clip(g, db(-70), db(30))
+    k = np.hanning(int(0.01 * SR)); g = np.convolve(g, k / k.sum(), 'same')
+    echo *= g
+    y = y + (echo if ch == 1 else np.stack([echo, echo], 1))
+    cap = target * 1.6                                                   # nor may the shot's own tail exceed the decay
+    g2 = np.minimum(1.0, cap / np.maximum(env5(y), 1e-9)); g2[:j] = 1.0
+    g2 = np.convolve(g2, k / k.sum(), 'same')
+    y = y * (g2 if ch == 1 else g2[:, None])
+    return fade_out(y, 150)
+
+
+def slap_echoes(x, shot, rng, delays=((0.09, 0.16), (0.19, 0.28), (0.32, 0.45)), gains_db=(-18.0, -24.0, -30.0), lps=(3500, 2500, 1800)):
+    """a few discrete echoes of the shot's first 60 ms, like a shot heard outdoors, added after the matching so the diffuse
+    tail keeps the reference's shape and the slaps stand out of it"""
+    head = highpass(shot[:int(0.06 * SR)], 300, 2) * np.hanning(int(0.12 * SR))[int(0.06 * SR):]
+    y = x.copy(); peak = np.abs(x).max()
+    for (a, b), g, lp in zip(delays, gains_db, lps):
+        d = rng.uniform(a, b); tap = lowpass(head, lp, 2); tap = tap / (np.abs(tap).max() + 1e-9) * peak * db(g)
+        place(y, tap, d, 1.0)
+    return y
 
 
 def close_distance_layer(shot, cal, T, rng, auto=False):
-    y = echo_material(shot, cal['t60'] * (0.7 if auto else 1.0) * rng.uniform(0.92, 1.08), rng)
+    y = echo_material(shot, cal["t60"] * (0.7 if auto else 1.0) * rng.uniform(0.92, 1.08), rng, direct=2.0)
     y, _ = reference.match(y, T, None)
-    return y
+    y = slap_echoes(y, shot, rng)
+    return with_tail(y, cal, T, rng, 2.6, join_ms=400)
 
 
 def medium_distance_layer(shot, cal, T, rng, auto=False):
     y = echo_material(shot, cal['t60'] * 1.3 * (0.7 if auto else 1.0) * rng.uniform(0.92, 1.08), rng, lo=150, hi=cal['far_lp'], n_early=10, lp_start=2500, lp_end=600, dense=0.35)
     y, _ = reference.match(y, T, None)
-    return y
+    y = slap_echoes(y, shot, rng, gains_db=(-20.0, -25.0, -30.0), lps=(2000, 1500, 1200))
+    return with_tail(y, cal, T, rng, 2.8, join_ms=400, lo=150)
 
 
 def actor_shot(st, rng, width=0.5):
@@ -257,12 +308,13 @@ def build_weapon(key, w, out_dir, profiles, log=print, targets=None):
     vcs = []
     for i, c in enumerate(cleans):
         y, inf = reference.match(c, T['very_close'], cal['lf_db']); vcs.append(y)
+        y = with_tail(y, cal, T['very_close'], rng, 1.5)
         put('very_close', i + 1, y, reference.HEADERS['very_close'])
         met = reference.metrics(y, T['very_close'])
         log(f"  {key}: very_close_{i + 1} crest {met['crest_db']:.1f} env {met['env_rms_err_db']:.1f} pulse x{inf['thump']:.2f} drive {inf['drive_db']:.1f}")
     for i, c in enumerate(cleans):
         y, _ = reference.match(resample(c, 1.0 + (0.015 if i % 2 else -0.015)), T['close'], cal['lf_db'])
-        put('close', i + 1, y, reference.HEADERS['close'])
+        put('close', i + 1, with_tail(y, cal, T['close'], rng, 1.0), reference.HEADERS['close'])
     for i in range(3):
         put('close_distance', i + 1, close_distance_layer(vcs[i % len(vcs)], cal, T['close_distance'], rng, auto), reference.HEADERS['close_distance'])
     for i in range(2):
@@ -273,7 +325,7 @@ def build_weapon(key, w, out_dir, profiles, log=print, targets=None):
             put('mech', i + 1, mech_layer(cal, rng, handling, auto) * MECH_GAIN, CM['npc_mech'])
     for i, st in enumerate(stereos):
         y, _ = reference.match(actor_shot(st, rng), T['very_close'], cal['lf_db'])
-        put('1p', i + 1, y, CM['actor_shot'])
+        put('1p', i + 1, with_tail(y, cal, T['very_close'], rng, 1.5), CM['actor_shot'])
     name, ratio = w['empty']
     click, info = pp.empty(os.path.join(SOURCES, name + '.ogg'), profiles)
     if ratio != 1.0:
