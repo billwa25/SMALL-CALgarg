@@ -4,9 +4,12 @@ reference gunshots (tools/reference.py: pressure pulse from the shot itself, oct
 density); action clicks are cut from the unjam recordings; the tails are echoes of the shot itself; the dry-fire clicks are
 the recorded empties, cleaned.
 
-Per weapon:  close (npc, mono, one per take) + mech (semi-autos, 2) + tail (3) + far (2)      -> [smallcal_<w>_snd_shoot]
-             1p (actor, stereo, one per take) + mech + 1p tail (stereo, 2)                    -> [smallcal_<w>_snd_shoot_actor]
-             <w>_empty                                                                        -> snd_empty
+Layers follow the reference pack's structure, each matched to the pack's measurement of that layer type for the weapon's
+calibre class (tools/reference_target.json):
+             very_close (15-40 m, one per take) + close (20-75 m, one per take) + close_distance (3) + medium_distance (2)
+             + mech (semi-autos, 2)                                                            -> [smallcal_<w>_snd_shoot]
+             1p (actor, stereo, one per take) + close + close_distance + medium_distance + mech -> [smallcal_<w>_snd_shoot_actor]
+             <w>_empty                                                                         -> snd_empty
 Every file: 44.1 kHz, X-Ray comment (min, max, volume, type, AI distance).
 
 python tools/build_sounds.py [--out DIR] [--keys a,b] [--wire] [--handling]
@@ -59,15 +62,17 @@ WEAPONS = {
                   takes=['38s-1', '38s-2', '38s-3', '38s-4'], empty=('38s-empty3', 1.0)),
 }
 
-# calibre profile: echo T60 s, far low-pass Hz, action level, low-end pulse relative to the reference (dB)
+# calibre profile: echo T60 s, far low-pass Hz, action level, reference class ('small' = the pack's .32 ACP machine
+# pistol, 'medium' = its 9x18 pistols), low-end pulse relative to that class (dB)
 CAL = {
-    '22lr': dict(t60=0.8, far_lp=1800, mech_level=0.30, lf_db=-1.5),
-    '22lr_rev': dict(t60=0.9, far_lp=1800, mech_level=0.0, lf_db=-0.5),
-    '25acp': dict(t60=0.9, far_lp=1800, mech_level=0.34, lf_db=-1.0),
-    '32acp': dict(t60=1.0, far_lp=1600, mech_level=0.36, lf_db=-0.5),
-    '380acp': dict(t60=1.1, far_lp=1500, mech_level=0.38, lf_db=0.0),
-    '38spl': dict(t60=1.2, far_lp=1400, mech_level=0.0, lf_db=0.5),
+    '22lr': dict(t60=0.8, far_lp=1800, mech_level=0.30, cls='small', lf_db=-3.0),
+    '22lr_rev': dict(t60=0.9, far_lp=1800, mech_level=0.0, cls='small', lf_db=-2.0),
+    '25acp': dict(t60=0.9, far_lp=1800, mech_level=0.34, cls='small', lf_db=-1.0),
+    '32acp': dict(t60=1.0, far_lp=1600, mech_level=0.36, cls='small', lf_db=0.0),
+    '380acp': dict(t60=1.1, far_lp=1500, mech_level=0.38, cls='medium', lf_db=0.0),
+    '38spl': dict(t60=1.2, far_lp=1400, mech_level=0.0, cls='medium', lf_db=0.5),
 }
+MECH_GAIN = 0.4           # the reference layers carry their own action noise, so the separate click layer sits well back
 
 
 # ---------------------------------------------------------------------------------------------------------------------- dsp helpers
@@ -192,28 +197,26 @@ def echo_ir(t60, rng, n_early=14, length=None, stereo=False, lp_start=6000, lp_e
     return out[:, 0] if not stereo else out
 
 
-def tail_layer(close, cal, rng, stereo=False, auto=False):
-    """the shot echoing off the surroundings: the shot's own first 150 ms, convolved with a sparse echo response"""
-    t60 = cal['t60'] * (0.65 if auto else 1.0) * rng.uniform(0.92, 1.08)
-    ir = echo_ir(t60, rng, stereo=stereo)
-    n = int(0.15 * SR); head = np.zeros(n); head[:min(n, len(close))] = close[:n]
-    head = highpass(head, 250, 2) * np.linspace(1, 0, n) ** 0.7
-    if stereo:
-        y = np.stack([convolve(head, ir[:, c]) for c in range(2)], 1)
-        y = np.stack([fade_out(highpass(y[:, c], 180, 2), 120) for c in range(2)], 1)
-    else:
-        y = fade_out(highpass(convolve(head, ir), 180, 2), 120)
-    y = y[:int(t60 * 1.4 * SR)]
-    return soft_clip(normalize(y, -10.0))
+def echo_material(shot, t60, rng, lo=200, hi=None, n_early=14, lp_start=6000, lp_end=1500, dense=0.2):
+    """the shot's first 150 ms through a sparse echo response: the raw material of a distance layer"""
+    ir = echo_ir(t60, rng, n_early=n_early, lp_start=lp_start, lp_end=lp_end, dense=dense)
+    n = int(0.15 * SR); head = np.zeros(n); head[:min(n, len(shot))] = shot[:n]
+    head = (bandpass(head, lo, hi, 2) if hi else highpass(head, lo, 2)) * np.linspace(1, 0, n) ** 0.7
+    y = convolve(head, ir)[:int(t60 * 1.6 * SR)]
+    direct = np.zeros(len(y)); direct[:n] = head                         # the direct sound, as the pack's layers keep it
+    return fade_out(y + direct, 150)
 
 
-def far_layer(close, cal, rng, auto=False):
-    """the distant report: the same echo response, longer and darker, on a band-limited shot"""
-    t60 = cal['t60'] * 1.2 * (0.6 if auto else 1.0)
-    ir = echo_ir(t60, rng, n_early=10, lp_start=2500, lp_end=600, dense=0.35)
-    pop = bandpass(close[:int(0.1 * SR)], 150, cal['far_lp'], 3)
-    y = fade_out(convolve(pop, ir)[:int(t60 * 1.3 * SR)], 150)
-    return soft_clip(normalize(y, -18.0))
+def close_distance_layer(shot, cal, T, rng, auto=False):
+    y = echo_material(shot, cal['t60'] * (0.7 if auto else 1.0) * rng.uniform(0.92, 1.08), rng)
+    y, _ = reference.match(y, T, None)
+    return y
+
+
+def medium_distance_layer(shot, cal, T, rng, auto=False):
+    y = echo_material(shot, cal['t60'] * 1.3 * (0.7 if auto else 1.0) * rng.uniform(0.92, 1.08), rng, lo=150, hi=cal['far_lp'], n_early=10, lp_start=2500, lp_end=600, dense=0.35)
+    y, _ = reference.match(y, T, None)
+    return y
 
 
 def actor_shot(st, rng, width=0.5):
@@ -231,68 +234,76 @@ def actor_shot(st, rng, width=0.5):
 
 # ---------------------------------------------------------------------------------------------------------------------- build
 
-def build_weapon(key, w, out_dir, profiles, log=print, target=None):
+def build_weapon(key, w, out_dir, profiles, log=print, targets=None):
     rng = np.random.default_rng(w.get('seed', 11) * 1000 + sum(map(ord, key)))
     cal = CAL[w['cal']]
-    target = target or reference.load_target()
+    targets = targets or reference.load_target()
+    T = targets[cal['cls']]
     folder = os.path.join(out_dir, w['folder']); os.makedirs(folder, exist_ok=True)
     auto = w.get('auto', False)
     files = {}
     def put(kind, i, x, cm):
-        name = f"{key}_shot_{kind}_{i}"
-        oggx.write_ogg(x, os.path.join(folder, name + '.ogg'), CM[cm])
+        name = f"{key}_{kind}_{i}"
+        oggx.write_ogg(x, os.path.join(folder, name + '.ogg'), cm)
         files.setdefault(kind, []).append(name)
-    closes, stereos = [], []
+    cleans, stereos = [], []
     for take in w['takes']:
         name, ratio = (take, 1.0) if isinstance(take, str) else take
         mono, st, info = pp.shot(os.path.join(SOURCES, name + '.ogg'), profiles)
         if ratio != 1.0:
             mono, st = resample(mono, ratio), resample(st, ratio)
-        mono, m_info = reference.match(mono, target, cal['lf_db'])
-        closes.append(mono); stereos.append(st)
-        met = reference.metrics(mono, target)
-        log(f"  {key}: take {name:12s} {len(mono) / SR:.2f}s  crest {met['crest_db']:.1f} env err {met['env_rms_err_db']:.1f} dB  thump x{m_info['thump']:.2f} drive {m_info['drive_db']:.1f} dB"
-            + (f"  brass cut at {info['brass_cut_ms']:.0f} ms" if info['brass_cut_ms'] else ''))
-    for i, c in enumerate(closes):
-        put('close', i + 1, c, 'npc_close')
+        cleans.append(mono); stereos.append(st)
+        log(f"  {key}: take {name:12s} {len(mono) / SR:.2f}s" + (f"  brass cut at {info['brass_cut_ms']:.0f} ms" if info['brass_cut_ms'] else ''))
+    vcs = []
+    for i, c in enumerate(cleans):
+        y, inf = reference.match(c, T['very_close'], cal['lf_db']); vcs.append(y)
+        put('very_close', i + 1, y, reference.HEADERS['very_close'])
+        met = reference.metrics(y, T['very_close'])
+        log(f"  {key}: very_close_{i + 1} crest {met['crest_db']:.1f} env {met['env_rms_err_db']:.1f} pulse x{inf['thump']:.2f} drive {inf['drive_db']:.1f}")
+    for i, c in enumerate(cleans):
+        y, _ = reference.match(resample(c, 1.0 + (0.015 if i % 2 else -0.015)), T['close'], cal['lf_db'])
+        put('close', i + 1, y, reference.HEADERS['close'])
+    for i in range(3):
+        put('close_distance', i + 1, close_distance_layer(vcs[i % len(vcs)], cal, T['close_distance'], rng, auto), reference.HEADERS['close_distance'])
+    for i in range(2):
+        put('medium_distance', i + 1, medium_distance_layer(vcs[i % len(vcs)], cal, T['medium_distance'], rng, auto), reference.HEADERS['medium_distance'])
     if w['mech']:
         handling = oggx.decode(os.path.join(SND, w['folder'], w['unjam']))
         for i in range(2):
-            put('mech', i + 1, mech_layer(cal, rng, handling, auto), 'npc_mech')
-    for i in range(3):
-        put('tail', i + 1, tail_layer(closes[i % len(closes)], cal, rng, auto=auto), 'npc_tail')
-    for i in range(2):
-        put('far', i + 1, far_layer(closes[i % len(closes)], cal, rng, auto=auto), 'npc_far')
+            put('mech', i + 1, mech_layer(cal, rng, handling, auto) * MECH_GAIN, CM['npc_mech'])
     for i, st in enumerate(stereos):
-        y, _ = reference.match(actor_shot(st, rng), target, cal['lf_db'])
-        put('1p', i + 1, y, 'actor_shot')
-    for i in range(2):
-        put('1p_tail', i + 1, tail_layer(closes[i % len(closes)], cal, rng, stereo=True, auto=auto), 'actor_tail')
+        y, _ = reference.match(actor_shot(st, rng), T['very_close'], cal['lf_db'])
+        put('1p', i + 1, y, CM['actor_shot'])
     name, ratio = w['empty']
     click, info = pp.empty(os.path.join(SOURCES, name + '.ogg'), profiles)
     if ratio != 1.0:
         click = resample(click, ratio)
     oggx.write_ogg(click, os.path.join(folder, f"{key}_empty.ogg"), CM['handling'])
     files['empty'] = [f"{key}_empty"]
-    log(f"  {key}: dry fire from {name} x{ratio:.2f}  {len(click) / SR:.2f}s")
     return files
+
+
+def clean_stale(key, w, out_dir):
+    """remove this tool's earlier generated layers (<key>_shot_*.ogg) that nothing references any more"""
+    folder = os.path.join(out_dir, w['folder']); gone = []
+    for fn in sorted(os.listdir(folder)) if os.path.isdir(folder) else []:
+        if fn.startswith(f"{key}_shot_") and fn.endswith('.ogg'):
+            os.remove(os.path.join(folder, fn)); gone.append(fn)
+    return gone
 
 
 def sections(key, w, files):
     p = f"weapons\\{w['folder']}\\"
     def layer(n, names):
         return [f"snd_{n}_layer{'' if i == 0 else i} = {p}{nm}" for i, nm in enumerate(names)]
-    L = []; n = 1
-    L += layer(n, files['close']); n += 1
-    if 'mech' in files:
-        L += layer(n, files['mech']); n += 1
-    L += layer(n, files['tail']); n += 1
-    L += layer(n, files['far']); n += 1
-    A = []; n = 1
-    A += layer(n, files['1p']); n += 1
-    if 'mech' in files:
-        A += layer(n, files['mech']); n += 1
-    A += layer(n, files['1p_tail']); n += 1
+    def block(order):
+        L = []; n = 1
+        for kind in order:
+            if kind in files:
+                L += layer(n, files[kind]); n += 1
+        return L
+    L = block(['very_close', 'close', 'close_distance', 'medium_distance', 'mech'])
+    A = block(['1p', 'close', 'close_distance', 'medium_distance', 'mech'])
     return (f"\n[smallcal_{key}_snd_shoot]\n" + '\n'.join(L) + f"\n\n[smallcal_{key}_snd_shoot_actor]\n" + '\n'.join(A) + '\n')
 
 
@@ -364,13 +375,14 @@ if __name__ == '__main__':
     ap.add_argument('--out', default=SND); ap.add_argument('--keys', default=','.join(WEAPONS))
     ap.add_argument('--wire', action='store_true'); ap.add_argument('--handling', action='store_true')
     a = ap.parse_args()
-    profiles = pp.profiles(SOURCES); target = reference.load_target()
+    profiles = pp.profiles(SOURCES); targets = reference.load_target()
     allsec = {}
     for key in a.keys.split(','):
         w = WEAPONS[key]
-        files = build_weapon(key, w, a.out, profiles, target=target)
+        files = build_weapon(key, w, a.out, profiles, targets=targets)
         allsec[key] = sections(key, w, files)
-        print(key, {k: len(v) for k, v in files.items()})
+        gone = clean_stale(key, w, a.out)
+        print(key, {k: len(v) for k, v in files.items()}, f"removed {len(gone)} stale files" if gone else '')
         if a.wire:
             path = os.path.join(CFG, f"w_{key}.ltx")
             with open(path, 'rb') as f:
